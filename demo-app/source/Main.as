@@ -1,15 +1,15 @@
 package {
 
-import design.Application;
+import design.DesignApplication;
 
-import ferdinand.create.Base;
+import ferdinand.create.Ferdinand;
 
 import flash.display.Sprite;
 
 public class Main extends Sprite {
 
     private var content:Sprite = new Sprite();
-    private var base:Base;
+    private var base:Ferdinand;
 
     public function Main() {
         super();
@@ -17,12 +17,10 @@ public class Main extends Sprite {
         // this.addEventListener(Event.RESIZE, handleResize);
 
         // content will display our application
-        content = new Sprite();
         this.addChild(content);
 
-        // use single Base
-        base = new Base();
-        base.addClassic(Application, content);
+        base = new Ferdinand();
+        DesignApplication(base, content);
     }
 }
 }

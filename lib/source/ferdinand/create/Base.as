@@ -1,15 +1,18 @@
 package ferdinand.create {
-import flash.display.DisplayObjectContainer;
-
-// Root Ferdinand instance
 public class Base {
+
+    public static const MAX_BLOCKS:int = 2048;
+
+    protected var _allblocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
+    protected var _lastBlock:int = 0;
+
     public function Base() {
         super();
     }
 
-    //TODO: implement addStarling
-    public function addClassic(BlockClass:Class, container:DisplayObjectContainer):void {
-        var block:Block = new BlockClass(this);
+    public function getBlock():int {
+        // TODO: Debug.assert
+        return _lastBlock++;
     }
 }
 }
