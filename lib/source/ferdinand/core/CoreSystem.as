@@ -8,16 +8,14 @@ import flash.display.DisplayObjectContainer;
 public class CoreSystem
 {
 
-	public static const MAX_BLOCKS:int = 2048;
-
 	// blocks:
-	protected var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
+	public static const MAX_BLOCKS:int = 2048;
 	protected var _lastBlock:int = 0;
+	internal var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
 
 	// components:
-	protected var _classicDisplayObjectContainers:Vector.<DisplayObjectContainer> = new Vector.<DisplayObjectContainer>(MAX_BLOCKS, true);
-	protected var _childBlocks:Vector.<Vector.<int>> = new Vector.<Vector.<int>>(MAX_BLOCKS, true);
-
+	internal var _classicDisplayObjectContainers:Vector.<DisplayObjectContainer> = new Vector.<DisplayObjectContainer>(MAX_BLOCKS, true);
+	internal var _childBlocks:Vector.<Vector.<int>> = new Vector.<Vector.<int>>(MAX_BLOCKS, true);
 
 	public function CoreSystem()
 	{

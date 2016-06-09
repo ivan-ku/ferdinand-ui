@@ -9,6 +9,7 @@ import flash.display.Sprite;
 
 public class Main extends Sprite
 {
+	public static const FPS:int = 60;
 
 	private var content:Sprite = new Sprite();
 	private var base:CoreFacade;
@@ -22,7 +23,7 @@ public class Main extends Sprite
 		// content will display our application
 		this.addChild(content);
 
-		base = new CoreFacade();
+		base = new CoreFacade(FPS);
 		DesignApplication(base, content);
 	}
 }
