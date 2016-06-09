@@ -1,6 +1,8 @@
 package ferdinand.core
 {
 
+import ferdinand.debug.Assert;
+
 import flash.display.DisplayObjectContainer;
 
 public class CoreSystem
@@ -24,20 +26,26 @@ public class CoreSystem
 
 	public function getBlock():int
 	{
-		// TODO: Debug.assert
+		CONFIG::DEBUG
+		{
+			Assert(_lastBlock + 1 < MAX_BLOCKS);
+		}
 		return _lastBlock++;
 	}
 
 	public function addClassicDisplayObjectContainer(blockId:int, container:DisplayObjectContainer):void
 	{
-		// TODO: Debug.assert: no display object
+		CONFIG::DEBUG
+		{
+			Assert((_blocks[blockId] & CoreComponents.DISPLAY_OBJECT) == 0);
+		}
 		_classicDisplayObjectContainers[blockId] = container;
 		_blocks[blockId] |= CoreComponents.DISPLAY_OBJECT;
 	}
 
 	public function addChildBlock(parentId:int, blockId:int):void
 	{
-		if (_blocks[parentId] & CoreComponents.CHILDREN_BLOCKS)
+		if ((_blocks[parentId] & CoreComponents.CHILDREN_BLOCKS) != 0)
 		{
 			_childBlocks[parentId].push(blockId);
 		}
