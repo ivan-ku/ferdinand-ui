@@ -12,7 +12,6 @@ Starling support is planned as well.
 * Data input interface that supports live updates and disk input
 
 # Performance requirements:
-* Minimal footprint of the system
 * Any part of the system could be easily rewritten in C++ for optimization
 * Provide easy way to setup different performance "presets" for each skin:
     * low - best performance
@@ -25,13 +24,14 @@ Starling support is planned as well.
 * Any time-consuming process (like setup()) could be "split" into several frames to prevent lag
 
 # Technological requirements:
-* Define scene layout, event-reaction and data-bindings in designer-friendly text format
-* Allow fast (less than 2 seconds) scene reload with preserved state
-* No singletons in AS3 
+* Define scene layout, event-reaction and data-bindings in designer-friendly text mode OR in declarative AS3 mode  
+* Allow fast (less than 2 seconds) scene reload with preserved state in designer-friendly text mode
 * Precise debug output and error reporting in debug build
 * Error prevention, suppression and recovery in release build
-* No logic inside DisplayObject, all changes made by external update() in bulk
 * Cover with unit tests everything that could be unit-tested
+
+# Roadmap
+Right now demo-app featuring List-like controls with scrolling is in active development, see [demo branch](https://github.com/ivan-ku/ferdinand-ui/tree/demo) 
 
 # See you!
 Ferdinand named after [Ferdinand de Saussure](https://en.wikipedia.org/wiki/Ferdinand_de_Saussure) and is just a fantasy right now, but it will be real soon (at least I hope so).
