@@ -6,6 +6,9 @@ import ferdinand.core.CoreFacade;
 public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 {
 	var blockId:int = base.addBlock(parentId);
+
+	base.addSkin(blockId, "ListBackgroundSkin");
+
 	// TODO: setup structure
 	return blockId;
 }
