@@ -18,6 +18,7 @@ public class CoreSystem
 	internal var _classicDisplayObjectContainers:Array = new Array(MAX_BLOCKS);
 	internal var _childBlocks:Array = new Array(MAX_BLOCKS);
 	internal var _skins:Array = new Array(MAX_BLOCKS);
+	internal var _dataSources:Array = new Array(MAX_BLOCKS);
 
 	public function CoreSystem()
 	{
@@ -62,6 +63,12 @@ public class CoreSystem
 	{
 		_skins[blockId] = skin;
 		_blocks[blockId] |= CoreComponents.SKIN;
+	}
+
+	public function addDataSource(blockId:int, dataSource:String):void
+	{
+		_dataSources[blockId] = dataSource;
+		_blocks[blockId] |= CoreComponents.DATA_SOURCE;
 	}
 }
 }

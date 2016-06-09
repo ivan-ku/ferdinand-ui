@@ -5,11 +5,15 @@ import ferdinand.core.CoreFacade;
 // Example of reusable control implementation using Ferdinand AS3-mode
 public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 {
-	var blockId:int = base.addBlock(parentId);
+	var selfId:int = base.addBlock(parentId);
 
-	base.addSkin(blockId, "ListBackgroundSkin");
+	// TODO: setup visual
+	var backgroundId:int = base.addBlock(selfId);
+	base.addSkin(backgroundId, "ListBackgroundSkin");
 
-	// TODO: setup structure
-	return blockId;
+	// data binding:
+	base.addDataSource(selfId, "glossary.csv");
+
+	return selfId;
 }
 }

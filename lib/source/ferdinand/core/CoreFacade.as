@@ -45,6 +45,12 @@ public class CoreFacade
 		_core.addSkin(blockId, skin);
 	}
 
+	public function addDataSource(blockId:int, dataSource:String):void
+	{
+		// TODO: here we want to convert dataSource from String to actual Resource
+		_core.addDataSource(blockId, dataSource);
+	}
+
 	protected function update(event:Event):void
 	{
 		CONFIG::DEBUG
