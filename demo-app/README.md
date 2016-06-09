@@ -1,2 +1,2 @@
 # Demo App
-This app demonstrates intended usage of the Ferdinand system.
+This app demonstrates usage of the Ferdinand system in AS3 mode

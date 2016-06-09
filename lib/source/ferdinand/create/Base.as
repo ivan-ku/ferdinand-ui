@@ -2,7 +2,6 @@ package ferdinand.create {
 import flash.display.DisplayObjectContainer;
 
 // Root Ferdinand instance
-// You could have several Bases inside one .swf if you like, but it's not for free
 public class Base {
     public function Base() {
         super();
