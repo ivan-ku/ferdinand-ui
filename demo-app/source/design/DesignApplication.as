@@ -7,6 +7,9 @@ import flash.display.Sprite;
 // Example of simple application implementation using Ferdinand AS3 mode
 public function DesignApplication(base:CoreFacade, container:Sprite):int
 {
+	// TODO: handle resize and scaling
+	// addEventListener(Event.RESIZE, handleResize);
+
 	var myId:int = base.addClassic(container);
 	// TODO: add memory tracking component
 	// TODO: create buttons to switch controls

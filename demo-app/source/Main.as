@@ -12,19 +12,17 @@ public class Main extends Sprite
 	public static const FPS:int = 60;
 
 	private var content:Sprite = new Sprite();
-	private var base:CoreFacade;
+	private var ferdinand:CoreFacade = new CoreFacade(FPS);
 
 	public function Main()
 	{
 		super();
-		// TODO: handle resize and scaling
-		// this.addEventListener(Event.RESIZE, handleResize);
 
-		// content will display our application
+		stage.frameRate = FPS;
+
 		this.addChild(content);
 
-		base = new CoreFacade(FPS);
-		DesignApplication(base, content);
+		DesignApplication(ferdinand, content);
 	}
 }
 }
