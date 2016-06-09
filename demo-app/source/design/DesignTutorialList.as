@@ -1,10 +1,12 @@
-package design {
-import ferdinand.create.Ferdinand;
+package design
+{
+import ferdinand.core.CoreFacade;
 
-public function DesignTutorialList(base:Ferdinand, parentId:int):int {
-    var blockId:int = base.addBlock(parentId);
-    // TODO: setup structure
-    return blockId;
+public function DesignTutorialList(base:CoreFacade, parentId:int):int
+{
+	var blockId:int = base.addBlock(parentId);
+	// TODO: setup structure
+	return blockId;
 }
 
 }
