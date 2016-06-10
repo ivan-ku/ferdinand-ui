@@ -2,6 +2,7 @@ package ferdinand.core
 {
 import ferdinand.data.IData;
 import ferdinand.debug.Assert;
+import ferdinand.resource.ResourceRequest;
 
 import flash.display.DisplayObjectContainer;
 
@@ -15,10 +16,12 @@ public class CoreStorage
 	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
 	public var _displayObjectContainerComponents:Array = new Array(MAX_BLOCKS);
 
+	// resource requests:
+	public var _resourceRequests:Vector.<ResourceRequest> = new Vector.<ResourceRequest>();
+
 	// components: using sparse Array here to keep memory footprint low
 	public var _childBlockComponents:Array = new Array(MAX_BLOCKS);
 	public var _skinComponents:Array = new Array(MAX_BLOCKS);
-	public var _dataSourceComponents:Array = new Array(MAX_BLOCKS);
 	public var _data:Array = new Array(MAX_BLOCKS);
 	protected var _blocksCount:int = 0;
 
@@ -67,16 +70,9 @@ public class CoreStorage
 		_blocks[blockId] |= CoreComponents.SKIN;
 	}
 
-	public function addDataSourceComponent(blockId:int, dataSource:String):void
+	public function addResourceRequest(dataSource:ResourceRequest):void
 	{
-		_dataSourceComponents[blockId] = dataSource;
-		_blocks[blockId] |= CoreComponents.DATA_SOURCE;
-	}
-
-	public function removeDataSourceComponent(blockId:int):void
-	{
-		_blocks[blockId] &= ~CoreComponents.DATA_SOURCE;
-		delete _dataSourceComponents[blockId];
+		_resourceRequests.push(dataSource);
 	}
 
 	public function addDataComponent(blockId:int, data:IData):void

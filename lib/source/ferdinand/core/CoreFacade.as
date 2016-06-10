@@ -1,11 +1,13 @@
 package ferdinand.core
 {
-import ferdinand.data.DataSourceSystem;
 import ferdinand.debug.Assert;
 import ferdinand.debug.MemoryMonitoringSystem;
+import ferdinand.resource.ResourceRequest;
+import ferdinand.resource.ResourceSystem;
 
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
+import flash.net.URLLoaderDataFormat;
 
 // Root CoreFacade instance
 public class CoreFacade
@@ -16,7 +18,7 @@ public class CoreFacade
 	protected var _storage:CoreStorage = new CoreStorage();
 
 	//systems:
-	protected var _dataSourceSystem:DataSourceSystem = new DataSourceSystem();
+	protected var _dataSourceSystem:ResourceSystem = new ResourceSystem();
 	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
 
 	public function CoreFacade(fps:int = 60)
@@ -49,9 +51,10 @@ public class CoreFacade
 		_storage.addSkinComponent(blockId, skin);
 	}
 
-	public function addDataSource(blockId:int, dataSource:String):void
+	public function addDataFromFile(blockId:int, resourceId:String):void
 	{
-		_storage.addDataSourceComponent(blockId, dataSource);
+		var request:ResourceRequest = new ResourceRequest(blockId, resourceId, URLLoaderDataFormat.TEXT, CoreComponents.DATA);
+		_storage.addResourceRequest(request);
 	}
 
 	protected function update(event:Event):void

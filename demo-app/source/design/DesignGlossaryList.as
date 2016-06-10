@@ -8,11 +8,17 @@ public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 	var selfId:int = base.addBlock(parentId);
 
 	// TODO: setup visual
+
 	var backgroundId:int = base.addBlock(selfId);
-	base.addSkin(backgroundId, "ListBackgroundSkin");
+	base.addSkin(backgroundId, "ListBackground");
+
+	var categoryId:int = base.addBlock(selfId);
+	base.addSkin(categoryId, "ListCategoryBackgroundSelected");
+	categoryId = base.addBlock(selfId);
+	base.addSkin(categoryId, "ListCategoryBackgroundUnselected");
 
 	// data binding:
-	base.addDataSource(selfId, "glossary.csv");
+	base.addDataFromFile(selfId, "glossary.csv");
 
 	return selfId;
 }
