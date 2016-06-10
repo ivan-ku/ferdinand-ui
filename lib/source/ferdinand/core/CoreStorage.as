@@ -1,6 +1,7 @@
 package ferdinand.core
 {
 
+import ferdinand.data.IData;
 import ferdinand.debug.Assert;
 
 import flash.display.DisplayObjectContainer;
@@ -15,10 +16,11 @@ internal class CoreStorage
 	internal var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
 
 	// components: using sparse Array here to keep memory footprint low
-	internal var _classicDisplayObjectContainers:Array = new Array(MAX_BLOCKS);
-	internal var _childBlocks:Array = new Array(MAX_BLOCKS);
-	internal var _skins:Array = new Array(MAX_BLOCKS);
-	internal var _dataSources:Array = new Array(MAX_BLOCKS);
+	internal var _displayObjectContainerComponents:Array = new Array(MAX_BLOCKS);
+	internal var _childBlockComponents:Array = new Array(MAX_BLOCKS);
+	internal var _skinComponents:Array = new Array(MAX_BLOCKS);
+	internal var _dataSourceComponents:Array = new Array(MAX_BLOCKS);
+	internal var _data:Array = new Array(MAX_BLOCKS);
 
 	public function CoreStorage()
 	{
@@ -31,7 +33,7 @@ internal class CoreStorage
 		{
 			var newBlockId:int = _blocksCount + 1;
 			Assert(newBlockId < MAX_BLOCKS);
-			Assert(_blocks[newBlockId] == 0);
+			Assert(_blocks[newBlockId] == CoreComponents.NO_COMPONENTS);
 		}
 		return _blocksCount++;
 	}
@@ -40,9 +42,9 @@ internal class CoreStorage
 	{
 		CONFIG::DEBUG
 		{
-			Assert((_blocks[blockId] & CoreComponents.DISPLAY_OBJECT) == 0);
+			Assert(!(_blocks[blockId] & CoreComponents.DISPLAY_OBJECT));
 		}
-		_classicDisplayObjectContainers[blockId] = container;
+		_displayObjectContainerComponents[blockId] = container;
 		_blocks[blockId] |= CoreComponents.DISPLAY_OBJECT;
 	}
 
@@ -50,26 +52,37 @@ internal class CoreStorage
 	{
 		if ((_blocks[parentId] & CoreComponents.CHILDREN_BLOCKS) != 0)
 		{
-			_childBlocks[parentId].push(blockId);
+			_childBlockComponents[parentId].push(blockId);
 		}
 		else
 		{
-			_childBlocks[parentId] = new <int>[blockId];
+			_childBlockComponents[parentId] = new <int>[blockId];
 			_blocks[parentId] |= CoreComponents.CHILDREN_BLOCKS;
 		}
 	}
 
 	internal function addSkin(blockId:int, skin:String):void
 	{
-		_skins[blockId] = skin;
+		_skinComponents[blockId] = skin;
 		_blocks[blockId] |= CoreComponents.SKIN;
 	}
 
 	internal function addDataSource(blockId:int, dataSource:String):void
 	{
-		_dataSources[blockId] = dataSource;
+		_dataSourceComponents[blockId] = dataSource;
 		_blocks[blockId] |= CoreComponents.DATA_SOURCE;
 	}
 
+	internal function removeDataSource(blockId:int):void
+	{
+		_blocks[blockId] &= ~CoreComponents.DATA_SOURCE;
+		delete _dataSourceComponents[blockId];
+	}
+
+	internal function addData(blockId:int, data:IData):void
+	{
+		_data[blockId] = data;
+		_blocks[blockId] |= CoreComponents.DATA;
+	}
 }
 }

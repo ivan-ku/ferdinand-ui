@@ -12,6 +12,7 @@ public class CoreComponents
 	public static const SKIN:int = 64;
 	public static const PRESET:int = 128;
 	public static const CHILDREN_BLOCKS:int = 256;
+	public static const DATA:int = 512;
 
 
 }
