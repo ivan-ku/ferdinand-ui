@@ -5,7 +5,7 @@ import ferdinand.debug.Assert;
 
 import flash.display.DisplayObjectContainer;
 
-public class CoreSystem
+public class CoreStorage
 {
 	// TODO: MAX_BLOCKS should be tunable by the user
 	public static const MAX_BLOCKS:int = 1 << 16;
@@ -20,7 +20,7 @@ public class CoreSystem
 	internal var _skins:Array = new Array(MAX_BLOCKS);
 	internal var _dataSources:Array = new Array(MAX_BLOCKS);
 
-	public function CoreSystem()
+	public function CoreStorage()
 	{
 		super();
 	}
@@ -71,8 +71,5 @@ public class CoreSystem
 		_blocks[blockId] |= CoreComponents.DATA_SOURCE;
 	}
 
-	public function update():void
-	{
-	}
 }
 }

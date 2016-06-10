@@ -12,7 +12,7 @@ public class CoreFacade
 	protected var _updateInitialized:Boolean = false;
 	protected var _fps:int;
 	//systems:
-	protected var _core:CoreSystem = new CoreSystem();
+	protected var _core:CoreStorage = new CoreStorage();
 	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
 
 	public function CoreFacade(fps:int = 60)
@@ -52,7 +52,6 @@ public class CoreFacade
 
 	protected function update(event:Event):void
 	{
-		_core.update();
 		CONFIG::DEBUG
 		{
 			Assert(event.target.stage.frameRate == _fps);
