@@ -1,33 +1,33 @@
 package ferdinand.core
 {
-
 import ferdinand.data.IData;
 import ferdinand.debug.Assert;
 
 import flash.display.DisplayObjectContainer;
 
-internal class CoreStorage
+// Here all Ferdinand data is stored, public access allowed to simplify System's update()s
+public class CoreStorage
 {
 	// TODO: MAX_BLOCKS should be tunable by the user
 	public static const MAX_BLOCKS:int = 1 << 16;
 
 	// blocks:
-	protected var _blocksCount:int = 0;
-	internal var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
+	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
+	public var _displayObjectContainerComponents:Array = new Array(MAX_BLOCKS);
 
 	// components: using sparse Array here to keep memory footprint low
-	internal var _displayObjectContainerComponents:Array = new Array(MAX_BLOCKS);
-	internal var _childBlockComponents:Array = new Array(MAX_BLOCKS);
-	internal var _skinComponents:Array = new Array(MAX_BLOCKS);
-	internal var _dataSourceComponents:Array = new Array(MAX_BLOCKS);
-	internal var _data:Array = new Array(MAX_BLOCKS);
+	public var _childBlockComponents:Array = new Array(MAX_BLOCKS);
+	public var _skinComponents:Array = new Array(MAX_BLOCKS);
+	public var _dataSourceComponents:Array = new Array(MAX_BLOCKS);
+	public var _data:Array = new Array(MAX_BLOCKS);
+	protected var _blocksCount:int = 0;
 
 	public function CoreStorage()
 	{
 		super();
 	}
 
-	internal function getBlock():int
+	public function getBlock():int
 	{
 		CONFIG::DEBUG
 		{
@@ -38,7 +38,7 @@ internal class CoreStorage
 		return _blocksCount++;
 	}
 
-	internal function addClassicDisplayObjectContainer(blockId:int, container:DisplayObjectContainer):void
+	public function addDisplayObjectContainerComponent(blockId:int, container:DisplayObjectContainer):void
 	{
 		CONFIG::DEBUG
 		{
@@ -48,7 +48,7 @@ internal class CoreStorage
 		_blocks[blockId] |= CoreComponents.DISPLAY_OBJECT;
 	}
 
-	internal function addChildBlock(parentId:int, blockId:int):void
+	public function addChildBlockComponent(parentId:int, blockId:int):void
 	{
 		if ((_blocks[parentId] & CoreComponents.CHILDREN_BLOCKS) != 0)
 		{
@@ -61,25 +61,25 @@ internal class CoreStorage
 		}
 	}
 
-	internal function addSkin(blockId:int, skin:String):void
+	public function addSkinComponent(blockId:int, skin:String):void
 	{
 		_skinComponents[blockId] = skin;
 		_blocks[blockId] |= CoreComponents.SKIN;
 	}
 
-	internal function addDataSource(blockId:int, dataSource:String):void
+	public function addDataSourceComponent(blockId:int, dataSource:String):void
 	{
 		_dataSourceComponents[blockId] = dataSource;
 		_blocks[blockId] |= CoreComponents.DATA_SOURCE;
 	}
 
-	internal function removeDataSource(blockId:int):void
+	public function removeDataSourceComponent(blockId:int):void
 	{
 		_blocks[blockId] &= ~CoreComponents.DATA_SOURCE;
 		delete _dataSourceComponents[blockId];
 	}
 
-	internal function addData(blockId:int, data:IData):void
+	public function addDataComponent(blockId:int, data:IData):void
 	{
 		_data[blockId] = data;
 		_blocks[blockId] |= CoreComponents.DATA;

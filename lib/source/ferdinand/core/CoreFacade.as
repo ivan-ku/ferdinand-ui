@@ -1,5 +1,6 @@
 package ferdinand.core
 {
+import ferdinand.data.DataSourceSystem;
 import ferdinand.debug.Assert;
 import ferdinand.debug.MemoryMonitoringSystem;
 
@@ -31,26 +32,26 @@ public class CoreFacade
 		{
 			container.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 		}
-		_storage.addClassicDisplayObjectContainer(blockId, container);
+		_storage.addDisplayObjectContainerComponent(blockId, container);
 		return blockId;
 	}
 
 	public function addBlock(parentId:int):int
 	{
 		var blockId:int = _storage.getBlock();
-		_storage.addChildBlock(parentId, blockId);
+		_storage.addChildBlockComponent(parentId, blockId);
 		return blockId;
 	}
 
 	public function addSkin(blockId:int, skin:String):void
 	{
 		// TODO: here we want to convert skin from String to actual Resource
-		_storage.addSkin(blockId, skin);
+		_storage.addSkinComponent(blockId, skin);
 	}
 
 	public function addDataSource(blockId:int, dataSource:String):void
 	{
-		_storage.addDataSource(blockId, dataSource);
+		_storage.addDataSourceComponent(blockId, dataSource);
 	}
 
 	protected function update(event:Event):void

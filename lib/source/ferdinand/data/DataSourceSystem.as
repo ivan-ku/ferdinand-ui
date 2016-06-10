@@ -1,7 +1,6 @@
-package ferdinand.core
+package ferdinand.data
 {
-import ferdinand.data.CreateData;
-import ferdinand.data.IData;
+import ferdinand.core.*;
 import ferdinand.debug.AssertInt;
 import ferdinand.debug.Log;
 
@@ -41,9 +40,9 @@ public class DataSourceSystem implements ICoreSystem
 				_dataSources[source] = dataSourceId;
 			}
 
-			storage.removeDataSource(blockId);
+			storage.removeDataSourceComponent(blockId);
 
-			storage.addData(blockId, source);
+			storage.addDataComponent(blockId, source);
 		}
 	}
 
