@@ -11,8 +11,10 @@ public class CoreFacade
 {
 	protected var _updateInitialized:Boolean = false;
 	protected var _fps:int;
+
+	protected var _storage:CoreStorage = new CoreStorage();
+
 	//systems:
-	protected var _core:CoreStorage = new CoreStorage();
 	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
 
 	public function CoreFacade(fps:int = 60)
@@ -23,31 +25,31 @@ public class CoreFacade
 
 	public function addClassic(container:DisplayObjectContainer):int
 	{
-		var blockId:int = _core.getBlock();
+		var blockId:int = _storage.getBlock();
 		if (!_updateInitialized)
 		{
 			container.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 		}
-		_core.addClassicDisplayObjectContainer(blockId, container);
+		_storage.addClassicDisplayObjectContainer(blockId, container);
 		return blockId;
 	}
 
 	public function addBlock(parentId:int):int
 	{
-		var blockId:int = _core.getBlock();
-		_core.addChildBlock(parentId, blockId);
+		var blockId:int = _storage.getBlock();
+		_storage.addChildBlock(parentId, blockId);
 		return blockId;
 	}
 
 	public function addSkin(blockId:int, skin:String):void
 	{
 		// TODO: here we want to convert skin from String to actual Resource
-		_core.addSkin(blockId, skin);
+		_storage.addSkin(blockId, skin);
 	}
 
 	public function addDataSource(blockId:int, dataSource:String):void
 	{
-		_core.addDataSource(blockId, dataSource);
+		_storage.addDataSource(blockId, dataSource);
 	}
 
 	protected function update(event:Event):void
