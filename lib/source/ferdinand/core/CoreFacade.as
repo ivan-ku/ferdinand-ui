@@ -47,12 +47,12 @@ public class CoreFacade
 
 	public function addDataSource(blockId:int, dataSource:String):void
 	{
-		// TODO: here we want to convert dataSource from String to actual Resource
 		_core.addDataSource(blockId, dataSource);
 	}
 
 	protected function update(event:Event):void
 	{
+		_core.update();
 		CONFIG::DEBUG
 		{
 			Assert(event.target.stage.frameRate == _fps);

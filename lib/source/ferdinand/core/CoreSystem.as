@@ -7,7 +7,7 @@ import flash.display.DisplayObjectContainer;
 
 public class CoreSystem
 {
-	// TODO: MAX_BLOCKS must be tunable by the user
+	// TODO: MAX_BLOCKS should be tunable by the user
 	public static const MAX_BLOCKS:int = 1 << 16;
 
 	// blocks:
@@ -69,6 +69,10 @@ public class CoreSystem
 	{
 		_dataSources[blockId] = dataSource;
 		_blocks[blockId] |= CoreComponents.DATA_SOURCE;
+	}
+
+	public function update():void
+	{
 	}
 }
 }

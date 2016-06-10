@@ -11,7 +11,6 @@ public function DesignApplication(base:CoreFacade, container:Sprite):int
 	// addEventListener(Event.RESIZE, handleResize);
 
 	var myId:int = base.addClassic(container);
-	// TODO: add memory tracking component
 	// TODO: create buttons to switch controls
 	// TODO: create field for search input
 	// TODO: create textarea output for DesignTutorialList
