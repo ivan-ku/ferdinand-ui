@@ -90,9 +90,9 @@ public class CoreStorage
 		_blocks[blockId] |= CoreComponents.SKIN;
 	}
 
-	public function addResourceRequest(dataSource:ResourceRequest):void
+	public function addResourceRequest(request:ResourceRequest):void
 	{
-		_resourceRequests.push(dataSource);
+		_resourceRequests.push(request);
 	}
 
 	public function ensureDataComponentExist(blockId:int):void

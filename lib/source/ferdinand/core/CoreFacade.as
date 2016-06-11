@@ -39,9 +39,9 @@ public class CoreFacade
 		return blockId;
 	}
 
-	public function addSkin(blockId:int, skin:String, estimatedNecessityCount:int = 1):void
+	public function addSkin(blockId:int, skin:String, estimatedCount:int = 1):void
 	{
-		var request:ResourceRequest = new ResourceRequest(blockId, skin, CoreComponents.SKIN, estimatedNecessityCount);
+		var request:ResourceRequest = new ResourceRequest(blockId, skin, CoreComponents.SKIN, estimatedCount);
 		_storage.addResourceRequest(request);
 	}
 
@@ -49,6 +49,7 @@ public class CoreFacade
 	{
 		var request:ResourceRequest = new ResourceRequest(blockId, resourceId, CoreComponents.DATA);
 		request.urlLoaderDataFormat = URLLoaderDataFormat.TEXT;
+		_storage.ensureDataComponentExist(blockId);
 		_storage.addResourceRequest(request);
 	}
 
