@@ -13,7 +13,7 @@ public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 	base.addSkin(backgroundId, "ListBackground");
 
 	var categoryId:int = base.addBlock(selfId);
-	base.addSkin(categoryId, "ListCategoryBackgroundSelected");
+	base.addSkin(categoryId, "ListCategoryBackground");
 	categoryId = base.addBlock(selfId);
 	base.addSkin(categoryId, "ListCategoryBackgroundUnselected");
 

@@ -8,14 +8,14 @@ public class ResourceRequest
 	public var urlLoaderDataFormat:String;
 	public var destinationComponent:int;
 	public var estimatedNecessityCount:int;
+	public var skinClass:Class;
 
-	public function ResourceRequest(blockId:int, resourceId:String, destinationComponent:int, urlLoaderDataFormat:String = null, estimatedNecessityCount:int = 1)
+	public function ResourceRequest(blockId:int, resourceId:String, destinationComponent:int, estimatedNecessityCount:int = 1)
 	{
 		super();
 		this.blockId = blockId;
 		this.resourceId = resourceId;
 		this.destinationComponent = destinationComponent;
-		this.urlLoaderDataFormat = urlLoaderDataFormat;
 		this.estimatedNecessityCount = estimatedNecessityCount;
 	}
 

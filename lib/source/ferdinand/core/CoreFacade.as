@@ -49,13 +49,14 @@ public class CoreFacade
 
 	public function addSkin(blockId:int, skin:String, estimatedNecessityCount:int = 1):void
 	{
-		var request:ResourceRequest = new ResourceRequest(blockId, skin, CoreComponents.SKIN, null, estimatedNecessityCount);
+		var request:ResourceRequest = new ResourceRequest(blockId, skin, CoreComponents.SKIN, estimatedNecessityCount);
 		_storage.addResourceRequest(request);
 	}
 
 	public function addDataFromFile(blockId:int, resourceId:String):void
 	{
-		var request:ResourceRequest = new ResourceRequest(blockId, resourceId, CoreComponents.DATA, URLLoaderDataFormat.TEXT);
+		var request:ResourceRequest = new ResourceRequest(blockId, resourceId, CoreComponents.DATA);
+		request.urlLoaderDataFormat = URLLoaderDataFormat.TEXT;
 		_storage.addResourceRequest(request);
 	}
 
