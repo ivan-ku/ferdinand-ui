@@ -1,10 +1,17 @@
 package ferdinand.core
 {
+import ferdinand.animation.AnimationSystem;
 import ferdinand.data.IData;
 import ferdinand.debug.Assert;
+import ferdinand.debug.MemoryMonitoringSystem;
+import ferdinand.display.AddDisplayComponent;
+import ferdinand.display.DisplaySystem;
+import ferdinand.layout.LayoutSystem;
 import ferdinand.resource.ResourceRequest;
+import ferdinand.resource.ResourceSystem;
 
 import flash.display.DisplayObjectContainer;
+import flash.events.Event;
 
 // Here all Ferdinand data is stored, public access allowed to simplify System's update()s
 public class CoreStorage
@@ -30,6 +37,13 @@ public class CoreStorage
 	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
 	protected var _blocksCount:int = 0;
 
+	//systems:
+	protected var _resourceSystem:ResourceSystem = new ResourceSystem();
+	protected var _displaySystem:DisplaySystem = new DisplaySystem();
+	protected var _layoutSystem:LayoutSystem = new LayoutSystem();
+	protected var _animationSystem:AnimationSystem = new AnimationSystem();
+	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
+
 	public function CoreStorage()
 	{
 		super();
@@ -37,36 +51,32 @@ public class CoreStorage
 
 	public function getBlock():int
 	{
-		var newBlockId:int = _blocksCount + 1;
+		var newBlockId:int = _blocksCount;
+		++_blocksCount;
 		CONFIG::DEBUG
 		{
 			Assert(newBlockId < MAX_BLOCKS);
 			Assert(_blocks[newBlockId] == CoreComponents.NO_COMPONENTS);
 		}
 		_parentBlockComponents[newBlockId] = PARENT_COMPONENT_OF_ROOT_BLOCK;
-		return _blocksCount++;
+		return newBlockId;
 	}
 
 	public function addDisplayComponent(blockId:int, container:DisplayObjectContainer):void
 	{
-		CONFIG::DEBUG
-		{
-			Assert((_blocks[blockId] & CoreComponents.DISPLAY) == CoreComponents.NO_COMPONENTS);
-		}
-		_displayComponents[blockId] = container;
-		_blocks[blockId] |= CoreComponents.DISPLAY;
+		AddDisplayComponent(this, blockId, container);
 	}
 
 	public function addChildBlockComponent(parentId:int, blockId:int):void
 	{
-		if ((_blocks[parentId] & CoreComponents.CHILDREN_BLOCKS) != 0)
-		{
-			_childBlockComponents[parentId].push(blockId);
-		}
-		else
+		if ((_blocks[parentId] & CoreComponents.CHILDREN_BLOCKS) == CoreComponents.NO_COMPONENTS)
 		{
 			_childBlockComponents[parentId] = new <int>[blockId];
 			_blocks[parentId] |= CoreComponents.CHILDREN_BLOCKS;
+		}
+		else
+		{
+			_childBlockComponents[parentId].push(blockId);
 		}
 		_parentBlockComponents[blockId] = parentId;
 	}
@@ -92,6 +102,18 @@ public class CoreStorage
 	{
 		_layoutComponents[blockId] = layout.toLowerCase();
 		_blocks[blockId] |= CoreComponents.LAYOUT;
+	}
+
+	public function update(event:Event):void
+	{
+		_resourceSystem.update(this);
+		_displaySystem.update(this);
+		_layoutSystem.update(this);
+		_animationSystem.update(this);
+		CONFIG::DEBUG
+		{
+			_memory.update();
+		}
 	}
 }
 }

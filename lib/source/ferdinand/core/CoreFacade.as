@@ -1,11 +1,6 @@
 package ferdinand.core
 {
-import ferdinand.debug.Assert;
-import ferdinand.debug.MemoryMonitoringSystem;
-import ferdinand.display.DisplaySystem;
-import ferdinand.layout.LayoutSystem;
 import ferdinand.resource.ResourceRequest;
-import ferdinand.resource.ResourceSystem;
 
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
@@ -15,30 +10,23 @@ import flash.net.URLLoaderDataFormat;
 public class CoreFacade
 {
 	protected var _updateInitialized:Boolean = false;
-	protected var _fps:int;
 
 	protected var _storage:CoreStorage = new CoreStorage();
 
-	//systems:
-	protected var _resourceSystem:ResourceSystem = new ResourceSystem();
-	protected var _displaySystem:DisplaySystem = new DisplaySystem();
-	protected var _layoutSystem:LayoutSystem = new LayoutSystem();
-	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
-
-	public function CoreFacade(fps:int = 60)
+	public function CoreFacade()
 	{
 		super();
-		_fps = fps;
 	}
 
 	// TODO: implement free()
 
-	public function addClassic(container:DisplayObjectContainer):int
+	public function createRootBlock(container:DisplayObjectContainer):int
 	{
 		var blockId:int = _storage.getBlock();
 		if (!_updateInitialized)
 		{
-			container.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
+			_updateInitialized = true;
+			container.addEventListener(Event.ENTER_FRAME, _storage.update, false, 0, true);
 		}
 		_storage.addDisplayComponent(blockId, container);
 		return blockId;
@@ -67,18 +55,6 @@ public class CoreFacade
 	public function addLayout(blockId:int, layout:String):void
 	{
 		_storage.addLayout(blockId, layout);
-	}
-
-	protected function update(event:Event):void
-	{
-		_resourceSystem.update(_storage);
-		_displaySystem.update(_storage);
-		_layoutSystem.update(_storage);
-		CONFIG::DEBUG
-		{
-			Assert(event.target.stage.frameRate == _fps);
-			_memory.update();
-		}
 	}
 }
 }

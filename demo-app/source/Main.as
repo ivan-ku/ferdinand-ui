@@ -12,7 +12,7 @@ public class Main extends Sprite
 	public static const FPS:int = 60;
 
 	private var content:Sprite = new Sprite();
-	private var ferdinand:CoreFacade = new CoreFacade(FPS);
+	private var ferdinand:CoreFacade = new CoreFacade();
 
 	public function Main()
 	{

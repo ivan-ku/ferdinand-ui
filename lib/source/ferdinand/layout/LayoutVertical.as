@@ -8,7 +8,7 @@ import flash.geom.Rectangle;
 public function LayoutVertical(storage:CoreStorage, blockId:int):void
 {
 	var children:Vector.<int> = storage._childBlockComponents[blockId];
-	var prevChildPosition:Rectangle = new Rectangle();
+	var prevChildPosition:Rectangle = new Rectangle(0, 0, 0, 0);
 	// align all children below first
 	for (var i:int = 0; i < children.length; i++)
 	{
