@@ -12,10 +12,15 @@ public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 	var backgroundId:int = base.addBlock(selfId);
 	base.addSkin(backgroundId, "ListBackground");
 
-	var categoryId:int = base.addBlock(selfId);
-	base.addSkin(categoryId, "ListCategoryBackground");
-	categoryId = base.addBlock(selfId);
-	base.addSkin(categoryId, "ListCategoryBackgroundUnselected");
+	var listItemsContainerId:int = base.addBlock(selfId);
+	base.addSkin(listItemsContainerId, "flash.display.Sprite");
+	base.addLayout(listItemsContainerId, "Vertical");
+	{
+		var categoryId:int = base.addBlock(listItemsContainerId);
+		base.addSkin(categoryId, "ListCategoryBackground");
+		categoryId = base.addBlock(listItemsContainerId);
+		base.addSkin(categoryId, "ListCategoryBackgroundUnselected");
+	}
 
 	// data binding:
 	base.addDataFromFile(selfId, "assets/glossary.csv");

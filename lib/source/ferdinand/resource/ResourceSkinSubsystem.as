@@ -79,7 +79,7 @@ public class ResourceSkinSubsystem
 				switch (resourceRequest.destinationComponent)
 				{
 					case CoreComponents.SKIN:
-						storage._skinComponents[resourceRequest.blockId] = _skinInstances[skinClass][i];
+						storage.addSkinComponent(resourceRequest.blockId, _skinInstances[skinClass][i]);
 						break;
 					default:
 					CONFIG::DEBUG

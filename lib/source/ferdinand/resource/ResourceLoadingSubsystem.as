@@ -25,8 +25,8 @@ public class ResourceLoadingSubsystem
 				switch (request.destinationComponent)
 				{
 					case CoreComponents.DATA:
-						// TODO: implement RawDataParsingSystem
-						storage._data[request.blockId] = loader.getData();
+						// TODO: implement Raw Data Parsing
+//						storage.addDataComponent(request.blockId, loader.getData());
 						break;
 					default:
 					CONFIG::DEBUG

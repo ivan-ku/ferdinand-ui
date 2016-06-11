@@ -2,6 +2,8 @@ package ferdinand.core
 {
 import ferdinand.debug.Assert;
 import ferdinand.debug.MemoryMonitoringSystem;
+import ferdinand.display.DisplaySystem;
+import ferdinand.layout.LayoutSystem;
 import ferdinand.resource.ResourceRequest;
 import ferdinand.resource.ResourceSystem;
 
@@ -18,7 +20,9 @@ public class CoreFacade
 	protected var _storage:CoreStorage = new CoreStorage();
 
 	//systems:
-	protected var _dataSourceSystem:ResourceSystem = new ResourceSystem();
+	protected var _resourceSystem:ResourceSystem = new ResourceSystem();
+	protected var _displaySystem:DisplaySystem = new DisplaySystem();
+	protected var _layoutSystem:LayoutSystem = new LayoutSystem();
 	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
 
 	public function CoreFacade(fps:int = 60)
@@ -36,7 +40,7 @@ public class CoreFacade
 		{
 			container.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 		}
-		_storage.addDisplayObjectContainerComponent(blockId, container);
+		_storage.addDisplayComponent(blockId, container);
 		return blockId;
 	}
 
@@ -60,9 +64,16 @@ public class CoreFacade
 		_storage.addResourceRequest(request);
 	}
 
+	public function addLayout(blockId:int, layout:String):void
+	{
+		_storage.addLayout(blockId, layout);
+	}
+
 	protected function update(event:Event):void
 	{
-		_dataSourceSystem.update(_storage);
+		_resourceSystem.update(_storage);
+		_displaySystem.update(_storage);
+		_layoutSystem.update(_storage);
 		CONFIG::DEBUG
 		{
 			Assert(event.target.stage.frameRate == _fps);

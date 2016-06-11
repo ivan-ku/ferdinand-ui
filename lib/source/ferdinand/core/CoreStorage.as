@@ -11,18 +11,22 @@ public class CoreStorage
 {
 	// TODO: MAX_BLOCKS should be tunable by the user
 	public static const MAX_BLOCKS:int = 1 << 16;
+	public static const PARENT_COMPONENT_OF_ROOT_BLOCK:int = -1;
 
-	// blocks:
-	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
-	public var _displayObjectContainerComponents:Array = new Array(MAX_BLOCKS);
 
 	// resource requests:
 	public var _resourceRequests:Vector.<ResourceRequest> = new Vector.<ResourceRequest>();
 
 	// components: using sparse Array here to keep memory footprint low
 	public var _childBlockComponents:Array = new Array(MAX_BLOCKS);
+	public var _parentBlockComponents:Array = new Array(MAX_BLOCKS);
+	public var _displayComponents:Array = new Array(MAX_BLOCKS);
 	public var _skinComponents:Array = new Array(MAX_BLOCKS);
-	public var _data:Array = new Array(MAX_BLOCKS);
+	public var _layoutComponents:Array = new Array(MAX_BLOCKS);
+	public var _dataComponents:Array = new Array(MAX_BLOCKS);
+
+	// blocks:
+	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
 	protected var _blocksCount:int = 0;
 
 	public function CoreStorage()
@@ -32,23 +36,24 @@ public class CoreStorage
 
 	public function getBlock():int
 	{
+		var newBlockId:int = _blocksCount + 1;
 		CONFIG::DEBUG
 		{
-			var newBlockId:int = _blocksCount + 1;
 			Assert(newBlockId < MAX_BLOCKS);
 			Assert(_blocks[newBlockId] == CoreComponents.NO_COMPONENTS);
 		}
+		_parentBlockComponents[newBlockId] = PARENT_COMPONENT_OF_ROOT_BLOCK;
 		return _blocksCount++;
 	}
 
-	public function addDisplayObjectContainerComponent(blockId:int, container:DisplayObjectContainer):void
+	public function addDisplayComponent(blockId:int, container:DisplayObjectContainer):void
 	{
 		CONFIG::DEBUG
 		{
-			Assert(!(_blocks[blockId] & CoreComponents.DISPLAY_OBJECT));
+			Assert((_blocks[blockId] & CoreComponents.DISPLAY) == CoreComponents.NO_COMPONENTS);
 		}
-		_displayObjectContainerComponents[blockId] = container;
-		_blocks[blockId] |= CoreComponents.DISPLAY_OBJECT;
+		_displayComponents[blockId] = container;
+		_blocks[blockId] |= CoreComponents.DISPLAY;
 	}
 
 	public function addChildBlockComponent(parentId:int, blockId:int):void
@@ -62,9 +67,10 @@ public class CoreStorage
 			_childBlockComponents[parentId] = new <int>[blockId];
 			_blocks[parentId] |= CoreComponents.CHILDREN_BLOCKS;
 		}
+		_parentBlockComponents[blockId] = parentId;
 	}
 
-	public function addSkinComponent(blockId:int, skin:String):void
+	public function addSkinComponent(blockId:int, skin:DisplayObjectContainer):void
 	{
 		_skinComponents[blockId] = skin;
 		_blocks[blockId] |= CoreComponents.SKIN;
@@ -77,8 +83,14 @@ public class CoreStorage
 
 	public function addDataComponent(blockId:int, data:IData):void
 	{
-		_data[blockId] = data;
+		_dataComponents[blockId] = data;
 		_blocks[blockId] |= CoreComponents.DATA;
+	}
+
+	public function addLayout(blockId:int, layout:String):void
+	{
+		_layoutComponents[blockId] = layout;
+		_blocks[blockId] |= CoreComponents.LAYOUT;
 	}
 }
 }
