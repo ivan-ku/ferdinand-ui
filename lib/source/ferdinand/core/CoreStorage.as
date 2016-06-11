@@ -1,10 +1,12 @@
 package ferdinand.core
 {
 import ferdinand.animation.AnimationSystem;
+import ferdinand.bind.BindingSystem;
 import ferdinand.debug.Assert;
 import ferdinand.debug.MemoryMonitoringSystem;
 import ferdinand.display.AddDisplayComponent;
 import ferdinand.display.DisplaySystem;
+import ferdinand.event.EventSystem;
 import ferdinand.layout.LayoutSystem;
 import ferdinand.resource.ResourceRequest;
 import ferdinand.resource.ResourceSystem;
@@ -19,10 +21,6 @@ public class CoreStorage
 	// TODO: MAX_BLOCKS should be tunable by the user
 	public static const MAX_BLOCKS:int = 1 << 16;
 	public static const PARENT_COMPONENT_OF_ROOT_BLOCK:int = -1;
-
-
-	// resource requests:
-	public var _resourceRequests:Vector.<ResourceRequest> = new Vector.<ResourceRequest>();
 
 	// components: using sparse Array here to keep memory footprint low
 	public var _childBlockComponents:Array = new Array(MAX_BLOCKS); // Vector.<int>
@@ -45,6 +43,8 @@ public class CoreStorage
 	protected var _displaySystem:DisplaySystem = new DisplaySystem();
 	protected var _layoutSystem:LayoutSystem = new LayoutSystem();
 	protected var _animationSystem:AnimationSystem = new AnimationSystem();
+	protected var _eventSystem:EventSystem = new EventSystem();
+	protected var _bindingSystem:BindingSystem = new BindingSystem();
 	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
 
 	public function CoreStorage()
@@ -92,7 +92,7 @@ public class CoreStorage
 
 	public function addResourceRequest(request:ResourceRequest):void
 	{
-		_resourceRequests.push(request);
+		_resourceSystem.registerRequest(request);
 	}
 
 	public function ensureDataComponentExist(blockId:int):void
@@ -124,6 +124,8 @@ public class CoreStorage
 		}
 		handlers[eventName] = handlerFunction;
 
+		_eventSystem.registerNewHandler(blockId, eventName, handlerFunction);
+
 		_blocks[blockId] |= CoreComponents.EVENT_HANDLER;
 		ensureDataComponentExist(blockId);
 	}
@@ -150,6 +152,8 @@ public class CoreStorage
 		_displaySystem.update(this);
 		_layoutSystem.update(this);
 		_animationSystem.update(this);
+		_eventSystem.update(this);
+		_bindingSystem.update(this);
 		CONFIG::DEBUG
 		{
 			_memory.update();
