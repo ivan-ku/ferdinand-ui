@@ -5,6 +5,7 @@ import ferdinand.core.CoreStorage;
 import ferdinand.core.ICoreSystem;
 import ferdinand.debug.Assert;
 
+import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
 public class DisplaySystem implements ICoreSystem
@@ -38,7 +39,8 @@ public class DisplaySystem implements ICoreSystem
 				Assert(parentBlockId != CoreStorage.PARENT_COMPONENT_OF_ROOT_BLOCK, "Can't set skin for root block!");
 			}
 			var container:DisplayObjectContainer = getContainer(parentBlockId, storage);
-			container.addChild(skins[blockId]);
+			var obj:DisplayObject = container.addChild(skins[blockId]);
+			storage._position[blockId] = obj.getBounds(container);
 			storage.addDisplayComponent(blockId, skins[blockId]);
 			delete skins[blockId];
 		}

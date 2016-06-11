@@ -14,7 +14,7 @@ public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 
 	var listItemsContainerId:int = base.addBlock(selfId);
 	base.addSkin(listItemsContainerId, "flash.display.Sprite");
-	base.addLayout(listItemsContainerId, "Vertical");
+	base.addLayout(listItemsContainerId, "vertical");
 	{
 		var categoryId:int = base.addBlock(listItemsContainerId);
 		base.addSkin(categoryId, "ListCategoryBackground");

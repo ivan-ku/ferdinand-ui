@@ -7,6 +7,10 @@ import ferdinand.debug.Assert;
 
 public class LayoutSystem implements ICoreSystem
 {
+	public static const LAYOUT_FUNCTIONS:Object = {
+		"vertical": LayoutVertical
+	};
+
 	public function LayoutSystem()
 	{
 		super();
@@ -22,6 +26,7 @@ public class LayoutSystem implements ICoreSystem
 			{
 				Assert((storage._blocks[blockId] & CoreComponents.CHILDREN_BLOCKS) != CoreComponents.NO_COMPONENTS, "");
 			}
+			LAYOUT_FUNCTIONS[layouts[blockId]](storage, blockId);
 		}
 	}
 }

@@ -18,12 +18,13 @@ public class CoreStorage
 	public var _resourceRequests:Vector.<ResourceRequest> = new Vector.<ResourceRequest>();
 
 	// components: using sparse Array here to keep memory footprint low
-	public var _childBlockComponents:Array = new Array(MAX_BLOCKS);
-	public var _parentBlockComponents:Array = new Array(MAX_BLOCKS);
-	public var _displayComponents:Array = new Array(MAX_BLOCKS);
-	public var _skinComponents:Array = new Array(MAX_BLOCKS);
-	public var _layoutComponents:Array = new Array(MAX_BLOCKS);
-	public var _dataComponents:Array = new Array(MAX_BLOCKS);
+	public var _childBlockComponents:Array = new Array(MAX_BLOCKS); // Array of Vector.<int>
+	public var _parentBlockComponents:Array = new Array(MAX_BLOCKS); // Array of int
+	public var _displayComponents:Array = new Array(MAX_BLOCKS); // Array of DisplayObjectContainer
+	public var _skinComponents:Array = new Array(MAX_BLOCKS); // Array of DisplayObjectContainer
+	public var _layoutComponents:Array = new Array(MAX_BLOCKS); // Array of String
+	public var _dataComponents:Array = new Array(MAX_BLOCKS); // Array of IData TODO
+	public var _position:Array = new Array(MAX_BLOCKS); // Array of Rect
 
 	// blocks:
 	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
@@ -89,7 +90,7 @@ public class CoreStorage
 
 	public function addLayout(blockId:int, layout:String):void
 	{
-		_layoutComponents[blockId] = layout;
+		_layoutComponents[blockId] = layout.toLowerCase();
 		_blocks[blockId] |= CoreComponents.LAYOUT;
 	}
 }
