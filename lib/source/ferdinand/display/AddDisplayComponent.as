@@ -20,7 +20,7 @@ public function AddDisplayComponent(storage:CoreStorage, blockId:int,
 		container.addChild(obj);
 	}
 
-	storage._position[blockId] = obj.getBounds(obj);
+	storage._boundsComponents[blockId] = obj.getBounds(obj);
 	storage._displayComponents[blockId] = obj;
 	storage._blocks[blockId] |= CoreComponents.DISPLAY;
 }

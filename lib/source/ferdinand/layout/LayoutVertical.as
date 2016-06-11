@@ -15,7 +15,7 @@ public function LayoutVertical(storage:CoreStorage, blockId:int):void
 		var childId:int = children[i];
 		if ((storage._blocks[childId] & CoreComponents.DISPLAY) != CoreComponents.NO_COMPONENTS)
 		{
-			var childPosition:Rectangle = storage._position[childId];
+			var childPosition:Rectangle = storage._boundsComponents[childId];
 			childPosition.y = prevChildPosition.y + prevChildPosition.height;
 			prevChildPosition = childPosition;
 		}

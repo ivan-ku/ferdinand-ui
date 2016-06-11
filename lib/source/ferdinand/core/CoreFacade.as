@@ -56,5 +56,15 @@ public class CoreFacade
 	{
 		_storage.addLayout(blockId, layout);
 	}
+
+	public function addEventHandler(blockId:int, eventName:String, handler:Function):void
+	{
+		_storage.addEventHandler(blockId, eventName, handler);
+	}
+
+	public function addBinding(blockId:int, bindingExpression:Function):void
+	{
+		_storage.addBinding(blockId, bindingExpression);
+	}
 }
 }

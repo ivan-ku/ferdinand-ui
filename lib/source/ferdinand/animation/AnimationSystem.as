@@ -21,7 +21,7 @@ public class AnimationSystem implements ICoreSystem
 			var blockId:int = int(key);
 			var display:DisplayObjectContainer = displayComponents[key];
 
-			var targetPosition:Rectangle = storage._position[blockId];
+			var targetPosition:Rectangle = storage._boundsComponents[blockId];
 			display.x = targetPosition.x;
 			display.y = targetPosition.y;
 

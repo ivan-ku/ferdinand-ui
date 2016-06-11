@@ -3,7 +3,7 @@ package ferdinand.data
 import ferdinand.core.CoreStorage;
 import ferdinand.debug.Assert;
 
-internal function CreateData(storage:CoreStorage, blockId:int, resourceId:String):IData
+internal function CreateData(storage:CoreStorage, blockId:int, resourceId:String):*
 {
 	const CSV:String = ".csv";
 	const XML:String = ".xml";

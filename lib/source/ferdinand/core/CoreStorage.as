@@ -1,7 +1,6 @@
 package ferdinand.core
 {
 import ferdinand.animation.AnimationSystem;
-import ferdinand.data.IData;
 import ferdinand.debug.Assert;
 import ferdinand.debug.MemoryMonitoringSystem;
 import ferdinand.display.AddDisplayComponent;
@@ -12,6 +11,7 @@ import ferdinand.resource.ResourceSystem;
 
 import flash.display.DisplayObjectContainer;
 import flash.events.Event;
+import flash.utils.Dictionary;
 
 // Here all Ferdinand data is stored, public access allowed to simplify System's update()s
 public class CoreStorage
@@ -25,13 +25,16 @@ public class CoreStorage
 	public var _resourceRequests:Vector.<ResourceRequest> = new Vector.<ResourceRequest>();
 
 	// components: using sparse Array here to keep memory footprint low
-	public var _childBlockComponents:Array = new Array(MAX_BLOCKS); // Array of Vector.<int>
-	public var _parentBlockComponents:Array = new Array(MAX_BLOCKS); // Array of int
-	public var _displayComponents:Array = new Array(MAX_BLOCKS); // Array of DisplayObjectContainer
-	public var _skinComponents:Array = new Array(MAX_BLOCKS); // Array of DisplayObjectContainer
-	public var _layoutComponents:Array = new Array(MAX_BLOCKS); // Array of String
-	public var _dataComponents:Array = new Array(MAX_BLOCKS); // Array of IData TODO
-	public var _position:Array = new Array(MAX_BLOCKS); // Array of Rect
+	public var _childBlockComponents:Array = new Array(MAX_BLOCKS); // Vector.<int>
+	public var _parentBlockComponents:Array = new Array(MAX_BLOCKS); // int
+	public var _displayComponents:Array = new Array(MAX_BLOCKS); // DisplayObjectContainer
+	public var _skinComponents:Array = new Array(MAX_BLOCKS); // DisplayObjectContainer
+	public var _layoutComponents:Array = new Array(MAX_BLOCKS); // String
+	public var _dataComponents:Array = new Array(MAX_BLOCKS); // Dictionary TODO
+	public var _boundsComponents:Array = new Array(MAX_BLOCKS); // Rectangle
+	// Dictionary {String to Function}:
+	public var _eventHandlerComponents:Array = new Array(MAX_BLOCKS);
+	public var _bindingComponents:Array = new Array(MAX_BLOCKS); // Vector.<Function>;
 
 	// blocks:
 	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
@@ -92,16 +95,53 @@ public class CoreStorage
 		_resourceRequests.push(dataSource);
 	}
 
-	public function addDataComponent(blockId:int, data:IData):void
+	public function ensureDataComponentExist(blockId:int):void
 	{
-		_dataComponents[blockId] = data;
-		_blocks[blockId] |= CoreComponents.DATA;
+		if (_dataComponents[blockId] == undefined)
+		{
+			_dataComponents[blockId] = new Dictionary();
+			_blocks[blockId] |= CoreComponents.DATA;
+		}
 	}
 
 	public function addLayout(blockId:int, layout:String):void
 	{
 		_layoutComponents[blockId] = layout.toLowerCase();
 		_blocks[blockId] |= CoreComponents.LAYOUT;
+	}
+
+	public function addEventHandler(blockId:int, eventName:String, handlerFunction:Function):void
+	{
+		var handlers:Dictionary = _eventHandlerComponents[blockId];
+		if (handlers == null)
+		{
+			handlers = new Dictionary();
+			_eventHandlerComponents[blockId] = handlers;
+		}
+		CONFIG::DEBUG
+		{
+			Assert(handlers[eventName] == undefined, "Only one handler per event allowed!");
+		}
+		handlers[eventName] = handlerFunction;
+
+		_blocks[blockId] |= CoreComponents.EVENT_HANDLER;
+		ensureDataComponentExist(blockId);
+	}
+
+	public function addBinding(blockId:int, bindingExpression:Function):void
+	{
+		var bindings:Vector.<Function> = _bindingComponents[blockId];
+		if (bindings == null)
+		{
+			_bindingComponents[blockId] = new <Function>[bindingExpression];
+		}
+		else
+		{
+			bindings.push(bindingExpression);
+		}
+
+		_blocks[blockId] |= CoreComponents.BINDING;
+		ensureDataComponentExist(blockId);
 	}
 
 	public function update(event:Event):void

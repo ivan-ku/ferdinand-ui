@@ -6,6 +6,8 @@ import ferdinand.debug.Assert;
 
 public class ResourceLoadingSubsystem
 {
+	public static const LOADED_DATA_KEY:String = "loaded_data";
+	
 	protected var _resourceURLLoaders:Vector.<ResourceURLLoader> = new Vector.<ResourceURLLoader>();
 
 	public function ResourceLoadingSubsystem()
@@ -25,8 +27,8 @@ public class ResourceLoadingSubsystem
 				switch (request.destinationComponent)
 				{
 					case CoreComponents.DATA:
-						// TODO: implement Raw Data Parsing
-//						storage.addDataComponent(request.blockId, loader.getData());
+						storage._dataComponents[request.blockId][LOADED_DATA_KEY] =
+								loader.getData();
 						break;
 					default:
 					CONFIG::DEBUG

@@ -1,7 +1,7 @@
 package ferdinand.data
 {
 
-internal class DataFromCSV implements IData
+internal class DataFromCSV
 {
 	protected var _sourceId:String;
 
@@ -11,9 +11,5 @@ internal class DataFromCSV implements IData
 		_sourceId = sourceId;
 	}
 
-	public function getDataView():DataView
-	{
-		return null;
-	}
 }
 }

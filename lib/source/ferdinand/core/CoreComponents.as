@@ -13,6 +13,8 @@ public class CoreComponents
 	public static const PRESET:int = 128;
 	public static const CHILDREN_BLOCKS:int = 256;
 	public static const DATA:int = 512;
+	public static const EVENT_HANDLER:int = 1024;
+	public static const BINDING:int = 2048;
 
 
 }
