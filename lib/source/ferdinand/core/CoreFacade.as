@@ -27,6 +27,8 @@ public class CoreFacade
 		_fps = fps;
 	}
 
+	// TODO: implement free()
+
 	public function addClassic(container:DisplayObjectContainer):int
 	{
 		var blockId:int = _storage.getBlock();
@@ -53,7 +55,7 @@ public class CoreFacade
 
 	public function addDataFromFile(blockId:int, resourceId:String):void
 	{
-		var request:ResourceRequest = new ResourceRequest(blockId, resourceId, URLLoaderDataFormat.TEXT, CoreComponents.DATA);
+		var request:ResourceRequest = new ResourceRequest(blockId, resourceId, CoreComponents.DATA, URLLoaderDataFormat.TEXT);
 		_storage.addResourceRequest(request);
 	}
 

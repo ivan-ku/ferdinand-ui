@@ -18,7 +18,7 @@ public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 	base.addSkin(categoryId, "ListCategoryBackgroundUnselected");
 
 	// data binding:
-	base.addDataFromFile(selfId, "glossary.csv");
+	base.addDataFromFile(selfId, "assets/glossary.csv");
 
 	return selfId;
 }

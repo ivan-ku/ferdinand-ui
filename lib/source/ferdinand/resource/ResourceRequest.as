@@ -9,13 +9,13 @@ public class ResourceRequest
 	public var destinationComponent:int;
 	public var estimatedNecessityCount:int;
 
-	public function ResourceRequest(blockId:int, resourceId:String, urlLoaderDataFormat:String, destinationComponent:int, estimatedNecessityCount:int = 1)
+	public function ResourceRequest(blockId:int, resourceId:String, destinationComponent:int, urlLoaderDataFormat:String = null, estimatedNecessityCount:int = 1)
 	{
 		super();
 		this.blockId = blockId;
 		this.resourceId = resourceId;
-		this.urlLoaderDataFormat = urlLoaderDataFormat;
 		this.destinationComponent = destinationComponent;
+		this.urlLoaderDataFormat = urlLoaderDataFormat;
 		this.estimatedNecessityCount = estimatedNecessityCount;
 	}
 
