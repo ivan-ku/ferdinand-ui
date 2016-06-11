@@ -47,10 +47,10 @@ public class CoreFacade
 		return blockId;
 	}
 
-	public function addSkin(blockId:int, skin:String):void
+	public function addSkin(blockId:int, skin:String, estimatedNecessityCount:int = 1):void
 	{
-		// TODO: here we want to convert skin from String to actual Resource
-		_storage.addSkinComponent(blockId, skin);
+		var request:ResourceRequest = new ResourceRequest(blockId, skin, CoreComponents.SKIN, null, estimatedNecessityCount);
+		_storage.addResourceRequest(request);
 	}
 
 	public function addDataFromFile(blockId:int, resourceId:String):void

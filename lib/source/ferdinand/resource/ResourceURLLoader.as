@@ -27,11 +27,11 @@ public class ResourceURLLoader
 		_urlLoader.addEventListener(Event.COMPLETE, handleComplete, false, 0, true);
 	}
 
-	protected var _resourceHandle:ResourceHandle;
+	protected var _resourceRequest:ResourceRequest;
 
-	public function get resourceHandle():ResourceHandle
+	public function get resourceRequest():ResourceRequest
 	{
-		return _resourceHandle;
+		return _resourceRequest;
 	}
 
 	protected var _state:int = STATE_READY;
@@ -41,15 +41,14 @@ public class ResourceURLLoader
 		return _state;
 	}
 
-	public function load(resourceHandle:ResourceHandle):void
+	public function load(resourceRequest:ResourceRequest):void
 	{
-		_resourceHandle = resourceHandle;
+		_resourceRequest = resourceRequest;
 
 		CONFIG::DEBUG
 		{
-			Assert(_resourceHandle.resource == null);
+			Assert(resourceRequest.urlLoaderDataFormat != null, "urlLoaderDataFormat must be set for Data requests");
 		}
-		var resourceRequest:ResourceRequest = _resourceHandle.request;
 		_urlLoader.dataFormat = resourceRequest.urlLoaderDataFormat;
 
 		_urlLoader.load(new URLRequest(resourceRequest.resourceId));
@@ -59,8 +58,17 @@ public class ResourceURLLoader
 	public function clearAndStop():void
 	{
 		_urlLoader.close();
-		_resourceHandle = null;
+		_resourceRequest = null;
 		_state = STATE_READY;
+	}
+
+	public function getData():*
+	{
+		CONFIG::DEBUG
+		{
+			Assert(_state == STATE_COMPLETE);
+		}
+		return _urlLoader.data;
 	}
 
 	private function handleSecurityError(event:SecurityErrorEvent):void
@@ -83,7 +91,6 @@ public class ResourceURLLoader
 
 	private function handleComplete(event:Event):void
 	{
-		_resourceHandle.resource = _urlLoader.data;
 		_state = STATE_COMPLETE;
 	}
 }
