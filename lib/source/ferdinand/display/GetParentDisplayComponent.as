@@ -5,7 +5,7 @@ import ferdinand.core.CoreStorage;
 
 import flash.display.DisplayObjectContainer;
 
-public function GetParentDisplayComponent(blockId:int, storage:CoreStorage):DisplayObjectContainer
+public function GetParentDisplayComponent(storage:CoreStorage, blockId:int):DisplayObjectContainer
 {
 	var blocks:Vector.<int> = storage._blocks;
 	var parents:Array = storage._parentBlockComponents;

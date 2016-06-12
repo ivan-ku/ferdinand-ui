@@ -32,10 +32,10 @@ public class EventSystem implements ICoreSystem
 			var eventTarget:Object = event.target;
 			CONFIG::DEBUG
 			{
-				Assert(_handlers[event.target][event.type] != undefined);
+				Assert(_handlers[eventTarget][event.type] != undefined);
 				Assert(_displayObjectToBlockId[eventTarget] != undefined);
 			}
-			_handlers[event.target][event.type](_displayObjectToBlockId[eventTarget], storage);
+			_handlers[eventTarget][event.type](_displayObjectToBlockId[eventTarget], storage);
 		}
 		// clear processed events
 		_eventBus.length = 0;

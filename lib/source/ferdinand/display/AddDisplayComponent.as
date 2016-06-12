@@ -16,7 +16,7 @@ public function AddDisplayComponent(storage:CoreStorage, blockId:int,
 	}
 	if (parentBlockId != CoreStorage.PARENT_COMPONENT_OF_ROOT_BLOCK)
 	{
-		var container:DisplayObjectContainer = GetParentDisplayComponent(parentBlockId, storage);
+		var container:DisplayObjectContainer = GetParentDisplayComponent(storage, parentBlockId);
 		container.addChild(obj);
 	}
 

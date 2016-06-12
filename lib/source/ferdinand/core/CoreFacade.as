@@ -24,7 +24,7 @@ public class CoreFacade
 
 	public function createRootBlock(container:DisplayObjectContainer):int
 	{
-		var blockId:int = _storage.getBlock();
+		var blockId:int = _storage.getRootBlock();
 		if (!_updateInitialized)
 		{
 			_updateInitialized = true;
@@ -34,11 +34,9 @@ public class CoreFacade
 		return blockId;
 	}
 
-	public function addBlock(parentId:int):int
+	public function addChildBlock(parentId:int):int
 	{
-		var blockId:int = _storage.getBlock();
-		_storage.addChildBlockComponent(parentId, blockId);
-		return blockId;
+		return _storage.getChildBlock(parentId);
 	}
 
 	public function addSkin(blockId:int, skin:String, estimatedCount:int = 1):void

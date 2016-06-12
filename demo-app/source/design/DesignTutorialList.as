@@ -4,7 +4,7 @@ import ferdinand.core.CoreFacade;
 
 public function DesignTutorialList(base:CoreFacade, parentId:int):int
 {
-	var blockId:int = base.addBlock(parentId);
+	var blockId:int = base.addChildBlock(parentId);
 	// TODO: setup structure
 	return blockId;
 }

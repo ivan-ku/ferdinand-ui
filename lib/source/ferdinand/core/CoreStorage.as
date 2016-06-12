@@ -2,6 +2,7 @@ package ferdinand.core
 {
 import ferdinand.animation.AnimationSystem;
 import ferdinand.bind.BindingSystem;
+import ferdinand.data.GetParentDataComponent;
 import ferdinand.debug.Assert;
 import ferdinand.debug.MemoryMonitoringSystem;
 import ferdinand.display.AddDisplayComponent;
@@ -52,16 +53,11 @@ public class CoreStorage
 		super();
 	}
 
-	public function getBlock():int
+	public function getRootBlock():int
 	{
-		var newBlockId:int = _blocksCount;
-		++_blocksCount;
-		CONFIG::DEBUG
-		{
-			Assert(newBlockId < MAX_BLOCKS);
-			Assert(_blocks[newBlockId] == CoreComponents.NO_COMPONENTS);
-		}
+		var newBlockId:int = getEmptyBlock();
 		_parentBlockComponents[newBlockId] = PARENT_COMPONENT_OF_ROOT_BLOCK;
+		ensureDataComponentExist(newBlockId, true); // root always has data
 		return newBlockId;
 	}
 
@@ -95,11 +91,18 @@ public class CoreStorage
 		_resourceSystem.registerRequest(request);
 	}
 
-	public function ensureDataComponentExist(blockId:int):void
+	public function ensureDataComponentExist(blockId:int, newDataScope:Boolean = false):void
 	{
 		if (_dataComponents[blockId] == undefined)
 		{
-			_dataComponents[blockId] = new Dictionary();
+			if (newDataScope)
+			{
+				_dataComponents[blockId] = new Dictionary();
+			}
+			else
+			{
+				_dataComponents[blockId] = GetParentDataComponent(this, blockId);
+			}
 			_blocks[blockId] |= CoreComponents.DATA;
 		}
 	}
@@ -149,6 +152,25 @@ public class CoreStorage
 	public function addSetDisplayPropertyRequest(blockId:int, property:String, value:*):void
 	{
 		_displaySystem.addDisplayPropertySetRequest(blockId, property, value);
+	}
+
+	public function getChildBlock(parentId:int):int
+	{
+		var blockId:int = getEmptyBlock();
+		addChildBlockComponent(parentId, blockId);
+		return blockId;
+	}
+
+	protected function getEmptyBlock():int
+	{
+		var newBlockId:int = _blocksCount;
+		++_blocksCount;
+		CONFIG::DEBUG
+		{
+			Assert(newBlockId < MAX_BLOCKS);
+			Assert(_blocks[newBlockId] == CoreComponents.NO_COMPONENTS);
+		}
+		return newBlockId;
 	}
 
 	public function update(event:Event):void
