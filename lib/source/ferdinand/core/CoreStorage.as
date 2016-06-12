@@ -107,13 +107,24 @@ public class CoreStorage
 		}
 	}
 
+	/**
+	 * Layout block's children in predefined order
+	 * @param blockId block with at lease one child block with Display component
+	 * @param layout Supported values: "vertical"
+	 */
 	public function addLayout(blockId:int, layout:String):void
 	{
 		_layoutComponents[blockId] = layout.toLowerCase();
 		_blocks[blockId] |= CoreComponents.LAYOUT;
 	}
 
-	public function addEventHandler(blockId:int, eventName:String, handlerFunction:Function):void
+	/**
+	 * Add expression that executes every time specific event is invoked
+	 * @param blockId must have Display component as it's only source of events for now
+	 * @param eventType type of event
+	 * @param handler TODO special type: EventHandlerExpression
+	 */
+	public function addEventHandler(blockId:int, eventType:String, handler:Function):void
 	{
 		var handlers:Dictionary = _eventHandlerComponents[blockId];
 		if (handlers == null)
@@ -123,16 +134,22 @@ public class CoreStorage
 		}
 		CONFIG::DEBUG
 		{
-			Assert(handlers[eventName] == undefined, "Only one handler per event allowed!");
+			Assert(handlers[eventType] == undefined, "Only one handler per event allowed!");
 		}
-		handlers[eventName] = handlerFunction;
+		handlers[eventType] = handler;
 
-		_eventSystem.registerNewHandler(blockId, eventName, handlerFunction);
+		_eventSystem.registerNewHandler(blockId, eventType, handler);
 
 		_blocks[blockId] |= CoreComponents.EVENT_HANDLER;
 		ensureDataComponentExist(blockId);
 	}
 
+	/**
+	 * Add expression that "binds" destination to source
+	 * TODO Expression evaluates every time source is changed
+	 * @param blockId
+	 * @param bindingExpression TODO special type: BindingExpression
+	 */
 	public function addBinding(blockId:int, bindingExpression:Function):void
 	{
 		var bindings:Vector.<Function> = _bindingComponents[blockId];
@@ -154,6 +171,11 @@ public class CoreStorage
 		_displaySystem.addDisplayPropertySetRequest(blockId, property, value);
 	}
 
+	/**
+	 * Create new empty block "inside" other block
+	 * @param parentId parent's block id
+	 * @return blockId of new block
+	 */
 	public function getChildBlock(parentId:int):int
 	{
 		var blockId:int = getEmptyBlock();
@@ -171,6 +193,11 @@ public class CoreStorage
 			Assert(_blocks[newBlockId] == CoreComponents.NO_COMPONENTS);
 		}
 		return newBlockId;
+	}
+
+	internal function reset():void
+	{
+		// TODO: implement
 	}
 
 	/**

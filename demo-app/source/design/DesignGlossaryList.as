@@ -1,45 +1,25 @@
 package design
 {
-import design.expressions.BindAlphaToIsOver;
-import design.expressions.BindVisibleToExpanded;
-import design.expressions.BindVisibleToNotExpanded;
-import design.expressions.ToggleExpanded;
-
-import ferdinand.core.Ferdinand;
-
-import flash.events.MouseEvent;
+import ferdinand.core.CoreStorage;
+import ferdinand.data.AddDataFromFile;
+import ferdinand.resource.AddSkin;
 
 // Example of reusable control implementation using Ferdinand AS3-mode
-public function DesignGlossaryList(base:Ferdinand, parentId:int):int
+public function DesignGlossaryList(blockId:int, storage:CoreStorage):int
 {
-	var selfId:int = base.addChildBlock(parentId);
+	var selfId:int = storage.getChildBlock(blockId);
 
-	// TODO: setup visual
+	var backgroundId:int = storage.getChildBlock(selfId);
+	AddSkin(storage, backgroundId, "ListBackground");
 
-	var backgroundId:int = base.addChildBlock(selfId);
-	base.addSkin(backgroundId, "ListBackground");
-
-	var listItemsContainerId:int = base.addChildBlock(selfId);
+	var listItemsContainerId:int = storage.getChildBlock(selfId);
 	{
-		base.addSkin(listItemsContainerId, "flash.display.Sprite");
-		base.addLayout(listItemsContainerId, "vertical");
-		base.addDataFromFile(selfId, "assets/glossary.csv");
-
-		var categoryButton:int = base.addChildBlock(listItemsContainerId);
-		{
-			base.addSkin(categoryButton, "flash.display.Sprite");
-			base.makeInteractive(categoryButton);
-			base.addBinding(categoryButton, BindAlphaToIsOver);
-			base.addEventHandler(categoryButton, MouseEvent.CLICK, ToggleExpanded);
-
-			var categoryId:int = base.addChildBlock(categoryButton);
-			base.addSkin(categoryId, "ListCategoryBackground");
-			base.addBinding(categoryId, BindVisibleToExpanded);
-
-			categoryId = base.addChildBlock(categoryButton);
-			base.addSkin(categoryId, "ListCategoryBackgroundUnselected");
-			base.addBinding(categoryId, BindVisibleToNotExpanded);
-		}
+		AddSkin(storage, listItemsContainerId, "flash.display.Sprite");
+		storage.addLayout(listItemsContainerId, "vertical");
+		const dataId:String = "glossary_data";
+		AddDataFromFile(storage, selfId, "assets/glossary.csv", dataId);
+		CreateDataItem(listItemsContainerId, storage);
+//		base.addBlocksConstructorFromData(selfId, dataId, CreateDataItem);
 	}
 
 	return selfId;

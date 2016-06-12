@@ -1,12 +1,11 @@
 package design
 {
-import ferdinand.core.Ferdinand;
+import ferdinand.core.CoreStorage;
 
-public function DesignTutorialList(base:Ferdinand, parentId:int):int
+public function DesignTutorialList(blockId:int, storage:CoreStorage):void
 {
-	var blockId:int = base.addChildBlock(parentId);
+	var selfId:int = storage.getChildBlock(blockId);
 	// TODO: setup structure
-	return blockId;
 }
 
 }

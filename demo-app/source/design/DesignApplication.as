@@ -1,23 +1,19 @@
 package design
 {
-import ferdinand.core.Ferdinand;
-
-import flash.display.Sprite;
+import ferdinand.core.CoreStorage;
 
 // Example of simple application implementation using Ferdinand AS3 mode
-public function DesignApplication(base:Ferdinand, container:Sprite):int
+public function DesignApplication(blockId:int, storage:CoreStorage):void
 {
 	// TODO: handle resize and scaling
 	// addEventListener(Event.RESIZE, handleResize);
 
-	var myId:int = base.createRootBlock(container);
 	// TODO: create buttons to switch controls
 	// TODO: create field for search input
 	// TODO: create textarea output for DesignTutorialList
 	// TODO: create image output for DesignInventoryList
-	DesignGlossaryList(base, myId);
-	DesignInventoryList(base, myId);
-	DesignTutorialList(base, myId);
-	return myId;
+	DesignGlossaryList(blockId, storage);
+	DesignInventoryList(blockId, storage);
+	DesignTutorialList(blockId, storage);
 }
 }

@@ -22,7 +22,7 @@ public class Main extends Sprite
 
 		this.addChild(content);
 
-		DesignApplication(ferdinand, content);
+		ferdinand.init(content, DesignApplication);
 	}
 }
 }
