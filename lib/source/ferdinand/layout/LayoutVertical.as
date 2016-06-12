@@ -17,6 +17,7 @@ public function LayoutVertical(storage:CoreStorage, blockId:int):void
 		{
 			var childPosition:Rectangle = storage._boundsComponents[childId];
 			childPosition.y = prevChildPosition.y + prevChildPosition.height;
+			storage.addSetDisplayPropertyRequest(childId, "y", childPosition.y);
 			prevChildPosition = childPosition;
 		}
 	}

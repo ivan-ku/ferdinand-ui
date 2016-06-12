@@ -1,12 +1,6 @@
 package design
 {
-import design.expressions.SetOverFalse;
-import design.expressions.SetOverTrue;
-import design.expressions.ToggleAlpha;
-
 import ferdinand.core.CoreFacade;
-
-import flash.events.MouseEvent;
 
 // Example of reusable control implementation using Ferdinand AS3-mode
 public function DesignGlossaryList(base:CoreFacade, parentId:int):int
@@ -23,14 +17,19 @@ public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 		base.addSkin(listItemsContainerId, "flash.display.Sprite");
 		base.addLayout(listItemsContainerId, "vertical");
 
-		var categoryId:int = base.addBlock(listItemsContainerId);
-		base.addSkin(categoryId, "ListCategoryBackground");
-		base.addEventHandler(categoryId, MouseEvent.ROLL_OVER, SetOverTrue);
-		base.addEventHandler(categoryId, MouseEvent.ROLL_OUT, SetOverFalse);
-		base.addBinding(categoryId, ToggleAlpha);
+		var categoryButton:int = base.addBlock(listItemsContainerId);
+		{
+			base.addSkin(categoryButton, "flash.display.Sprite");
+			base.makeInteractive(categoryButton);
+			base.addBinding(categoryButton, ToggleAlpha);
+			//base.addEventHandler(categoryButton, MouseEvent.CLICK, ToggleExpandedTrue);
 
-		categoryId = base.addBlock(listItemsContainerId);
-		base.addSkin(categoryId, "ListCategoryBackgroundUnselected");
+			var categoryId:int = base.addBlock(categoryButton);
+			base.addSkin(categoryId, "ListCategoryBackground");
+
+			categoryId = base.addBlock(categoryButton);
+			base.addSkin(categoryId, "ListCategoryBackgroundUnselected");
+		}
 	}
 
 	// data binding:

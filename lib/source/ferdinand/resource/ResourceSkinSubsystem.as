@@ -37,7 +37,7 @@ public class ResourceSkinSubsystem
 		}
 		_instantiateQueue.length = 0;
 
-		for (i = 0; i < _pendingRequests.length; i++)
+		for (i = 0; i < _pendingRequests.length; ++i)
 		{
 			resolveRequest(_pendingRequests[i], storage);
 		}
@@ -79,7 +79,8 @@ public class ResourceSkinSubsystem
 				switch (resourceRequest.destinationComponent)
 				{
 					case CoreComponents.SKIN:
-						storage.addSkinComponent(resourceRequest.blockId, _skinInstances[skinClass][i]);
+						storage.addSkinComponent(resourceRequest.blockId,
+								_skinInstances[skinClass][i]);
 						break;
 					default:
 					CONFIG::DEBUG
@@ -87,7 +88,13 @@ public class ResourceSkinSubsystem
 						Assert(false, "Destination not supported");
 					}
 				}
+				// return on success:
+				return;
 			}
+		}
+		CONFIG::DEBUG
+		{
+			Assert(false, "Can't resolve request! It's a bug.");
 		}
 	}
 }

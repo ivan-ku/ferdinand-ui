@@ -1,5 +1,7 @@
 package ferdinand.core
 {
+import ferdinand.controls.MakeInteractive;
+import ferdinand.resource.AddSkin;
 import ferdinand.resource.ResourceRequest;
 
 import flash.display.DisplayObjectContainer;
@@ -41,8 +43,7 @@ public class CoreFacade
 
 	public function addSkin(blockId:int, skin:String, estimatedCount:int = 1):void
 	{
-		var request:ResourceRequest = new ResourceRequest(blockId, skin, CoreComponents.SKIN, estimatedCount);
-		_storage.addResourceRequest(request);
+		AddSkin(_storage, blockId, skin, estimatedCount);
 	}
 
 	public function addDataFromFile(blockId:int, resourceId:String):void
@@ -66,6 +67,12 @@ public class CoreFacade
 	public function addBinding(blockId:int, bindingExpression:Function):void
 	{
 		_storage.addBinding(blockId, bindingExpression);
+	}
+
+	// sets isOver and isDown states to block's data component
+	public function makeInteractive(blockId:int):void
+	{
+		MakeInteractive(_storage, blockId);
 	}
 }
 }

@@ -146,6 +146,11 @@ public class CoreStorage
 		ensureDataComponentExist(blockId);
 	}
 
+	public function addSetDisplayPropertyRequest(blockId:int, property:String, value:*):void
+	{
+		_displaySystem.addDisplayPropertySetRequest(blockId, property, value);
+	}
+
 	public function update(event:Event):void
 	{
 		_resourceSystem.update(this);
