@@ -173,6 +173,11 @@ public class CoreStorage
 		return newBlockId;
 	}
 
+	/**
+	 * Heartbeat of Ferdinand happens here
+	 * Expected to be call
+	 * @param event
+	 */
 	public function update(event:Event):void
 	{
 		_resourceSystem.update(this);

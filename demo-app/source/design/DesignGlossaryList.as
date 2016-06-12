@@ -5,12 +5,12 @@ import design.expressions.BindVisibleToExpanded;
 import design.expressions.BindVisibleToNotExpanded;
 import design.expressions.ToggleExpanded;
 
-import ferdinand.core.CoreFacade;
+import ferdinand.core.Ferdinand;
 
 import flash.events.MouseEvent;
 
 // Example of reusable control implementation using Ferdinand AS3-mode
-public function DesignGlossaryList(base:CoreFacade, parentId:int):int
+public function DesignGlossaryList(base:Ferdinand, parentId:int):int
 {
 	var selfId:int = base.addChildBlock(parentId);
 
@@ -23,6 +23,7 @@ public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 	{
 		base.addSkin(listItemsContainerId, "flash.display.Sprite");
 		base.addLayout(listItemsContainerId, "vertical");
+		base.addDataFromFile(selfId, "assets/glossary.csv");
 
 		var categoryButton:int = base.addChildBlock(listItemsContainerId);
 		{
@@ -40,9 +41,6 @@ public function DesignGlossaryList(base:CoreFacade, parentId:int):int
 			base.addBinding(categoryId, BindVisibleToNotExpanded);
 		}
 	}
-
-	// data binding:
-	base.addDataFromFile(selfId, "assets/glossary.csv");
 
 	return selfId;
 }

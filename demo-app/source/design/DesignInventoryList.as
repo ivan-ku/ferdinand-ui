@@ -1,8 +1,8 @@
 package design
 {
-import ferdinand.core.CoreFacade;
+import ferdinand.core.Ferdinand;
 
-public function DesignInventoryList(base:CoreFacade, parentId:int):int
+public function DesignInventoryList(base:Ferdinand, parentId:int):int
 {
 	var blockId:int = base.addChildBlock(parentId);
 	// TODO: setup structure

@@ -1,11 +1,11 @@
 package design
 {
-import ferdinand.core.CoreFacade;
+import ferdinand.core.Ferdinand;
 
 import flash.display.Sprite;
 
 // Example of simple application implementation using Ferdinand AS3 mode
-public function DesignApplication(base:CoreFacade, container:Sprite):int
+public function DesignApplication(base:Ferdinand, container:Sprite):int
 {
 	// TODO: handle resize and scaling
 	// addEventListener(Event.RESIZE, handleResize);

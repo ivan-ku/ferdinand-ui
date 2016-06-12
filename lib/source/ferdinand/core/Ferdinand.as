@@ -8,14 +8,16 @@ import flash.display.DisplayObjectContainer;
 import flash.events.Event;
 import flash.net.URLLoaderDataFormat;
 
-// Root CoreFacade instance
-public class CoreFacade
+/**
+ * Root Ferdinand instance. Front-end for users
+ */
+public class Ferdinand
 {
 	protected var _updateInitialized:Boolean = false;
 
 	protected var _storage:CoreStorage = new CoreStorage();
 
-	public function CoreFacade()
+	public function Ferdinand()
 	{
 		super();
 	}
@@ -68,16 +70,33 @@ public class CoreFacade
 		_storage.addResourceRequest(request);
 	}
 
+	/**
+	 * Layout block's children in predefined order
+	 * @param blockId block with at lease one child block with Display component
+	 * @param layout Supported values: "vertical"
+	 */
 	public function addLayout(blockId:int, layout:String):void
 	{
 		_storage.addLayout(blockId, layout);
 	}
 
-	public function addEventHandler(blockId:int, eventName:String, handler:Function):void
+	/**
+	 * Add expression that executes every time specific event is invoked
+	 * @param blockId must have Display component as it's only source of events for now
+	 * @param eventType type of event
+	 * @param handler TODO special type: EventHandlerExpression
+	 */
+	public function addEventHandler(blockId:int, eventType:String, handler:Function):void
 	{
-		_storage.addEventHandler(blockId, eventName, handler);
+		_storage.addEventHandler(blockId, eventType, handler);
 	}
 
+	/**
+	 * Add expression that "binds" destination to source
+	 * TODO Expression evaluates every time source is changed
+	 * @param blockId
+	 * @param bindingExpression TODO special type: BindingExpression
+	 */
 	public function addBinding(blockId:int, bindingExpression:Function):void
 	{
 		_storage.addBinding(blockId, bindingExpression);

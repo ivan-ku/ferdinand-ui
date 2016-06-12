@@ -3,7 +3,7 @@ package
 
 import design.DesignApplication;
 
-import ferdinand.core.CoreFacade;
+import ferdinand.core.Ferdinand;
 
 import flash.display.Sprite;
 
@@ -12,7 +12,7 @@ public class Main extends Sprite
 	public static const FPS:int = 60;
 
 	private var content:Sprite = new Sprite();
-	private var ferdinand:CoreFacade = new CoreFacade();
+	private var ferdinand:Ferdinand = new Ferdinand();
 
 	public function Main()
 	{
