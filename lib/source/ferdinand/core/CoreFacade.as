@@ -22,6 +22,11 @@ public class CoreFacade
 
 	// TODO: implement free()
 
+	/**
+	 * Associate container with new block
+	 * @param container must be added to Stage already
+	 * @return blockId of new block
+	 */
 	public function createRootBlock(container:DisplayObjectContainer):int
 	{
 		var blockId:int = _storage.getRootBlock();
@@ -34,11 +39,22 @@ public class CoreFacade
 		return blockId;
 	}
 
+	/**
+	 * Create new empty block "inside" other block
+	 * @param parentId parent's block id
+	 * @return blockId of new block
+	 */
 	public function addChildBlock(parentId:int):int
 	{
 		return _storage.getChildBlock(parentId);
 	}
 
+	/**
+	 * Asynchronously create block's display representation
+	 * @param blockId
+	 * @param skin library linkage id supported
+	 * @param estimatedCount preallocate more than one instance of a skin
+	 */
 	public function addSkin(blockId:int, skin:String, estimatedCount:int = 1):void
 	{
 		AddSkin(_storage, blockId, skin, estimatedCount);
@@ -67,7 +83,11 @@ public class CoreFacade
 		_storage.addBinding(blockId, bindingExpression);
 	}
 
-	// sets isOver and isDown states to block's data component
+	/**
+	 * Sets isOver and isDown states to block's data component
+	 * Requires that block has Display component
+	 * @param blockId
+	 */
 	public function makeInteractive(blockId:int):void
 	{
 		MakeInteractive(_storage, blockId);
