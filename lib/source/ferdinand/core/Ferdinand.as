@@ -62,9 +62,10 @@ public class Ferdinand
 		AddSkin(_storage, blockId, skin, estimatedCount);
 	}
 
-	public function addDataFromFile(blockId:int, resourceId:String):void
+	public function addDataFromFile(blockId:int, resourceId:String,
+	                                destinationComponentProperty:String = "loaded_data"):void
 	{
-		var request:ResourceRequest = new ResourceRequest(blockId, resourceId, CoreComponents.DATA);
+		var request:ResourceRequest = new ResourceRequest(blockId, resourceId, CoreComponents.DATA, 1, destinationComponentProperty);
 		request.urlLoaderDataFormat = URLLoaderDataFormat.TEXT;
 		_storage.ensureDataComponentExist(blockId);
 		_storage.addResourceRequest(request);
