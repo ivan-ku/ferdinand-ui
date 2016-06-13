@@ -11,7 +11,6 @@ public function AddDataFromFile(storage:CoreStorage, blockId:int, resourceId:Str
 {
 	var request:ResourceRequest = new ResourceRequest(blockId, resourceId, CoreComponents.DATA, 1, destinationComponentProperty);
 	request.urlLoaderDataFormat = URLLoaderDataFormat.TEXT;
-	storage.ensureDataComponentExist(blockId);
 	storage.addResourceRequest(request);
 }
 }

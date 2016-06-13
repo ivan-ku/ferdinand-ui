@@ -17,6 +17,7 @@ public class BindingSystem implements ICoreSystem
 		var bindingComponents:Array = storage._bindingComponents;
 		for (var key:String in bindingComponents)
 		{
+			var blockId:int = int(key);
 			CONFIG::DEBUG
 			{
 				AssertInt(storage._blocks[key] & CoreComponents.BINDING);
@@ -25,8 +26,10 @@ public class BindingSystem implements ICoreSystem
 			for (var i:int = 0; i < blocksBindings.length; i++)
 			{
 				var bindingExpression:Function = blocksBindings[i];
-				bindingExpression.call(null, int(key), storage);
+				bindingExpression.call(null, blockId, storage);
 			}
+			// TODO: subscription for perpetual bindings must be done here
+			delete bindingComponents[key];
 		}
 	}
 }

@@ -18,8 +18,11 @@ public function DesignGlossaryList(blockId:int, storage:CoreStorage):int
 		storage.addLayout(listItemsContainerId, "vertical");
 		const dataId:String = "glossary_data";
 		AddDataFromFile(storage, selfId, "assets/glossary.csv", dataId);
-		CreateDataItem(listItemsContainerId, storage);
-//		base.addBlocksConstructorFromData(selfId, dataId, CreateDataItem);
+		DesignDataItem(listItemsContainerId, storage);
+		DesignDataItem(listItemsContainerId, storage);
+		DesignDataItem(listItemsContainerId, storage);
+		DesignDataItem(listItemsContainerId, storage);
+//		LoopOverList(storage, selfId, dataId, DesignDataItem);
 	}
 
 	return selfId;
