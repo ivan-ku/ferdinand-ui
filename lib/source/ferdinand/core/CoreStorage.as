@@ -2,9 +2,8 @@ package ferdinand.core
 {
 import ferdinand.animation.AnimationSystem;
 import ferdinand.bind.BindingSystem;
-import ferdinand.data.GetParentDataComponent;
 import ferdinand.debug.Assert;
-import ferdinand.debug.MemoryMonitoringSystem;
+import ferdinand.debug.DebugSystem;
 import ferdinand.display.AddDisplayComponent;
 import ferdinand.display.DisplaySystem;
 import ferdinand.event.FlashEventSystem;
@@ -13,20 +12,23 @@ import ferdinand.resource.ResourceRequest;
 import ferdinand.resource.ResourceSystem;
 
 import flash.display.DisplayObjectContainer;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.utils.Dictionary;
+import flash.utils.getTimer;
 
 // Here all Ferdinand data is stored, public access allowed to simplify System's update()s
 public class CoreStorage
 {
 	// TODO: MAX_BLOCKS should be tunable by the user
 	public static const MAX_BLOCKS:int = 1 << 16;
+	public static const UPDATE_TIME_BUDGET:int = 1; // spend maximum 1ms for single update
 	public static const PARENT_COMPONENT_OF_ROOT_BLOCK:int = -1;
 
 	// components: using sparse Array here to keep memory footprint low
+	public var _displayComponents:Array = new Array(MAX_BLOCKS); // DisplayObjectContainer
 	public var _childBlockComponents:Array = new Array(MAX_BLOCKS); // Vector.<int>
 	public var _parentBlockComponents:Array = new Array(MAX_BLOCKS); // int
-	public var _displayComponents:Array = new Array(MAX_BLOCKS); // DisplayObjectContainer
 	public var _skinComponents:Array = new Array(MAX_BLOCKS); // DisplayObjectContainer
 	public var _layoutComponents:Array = new Array(MAX_BLOCKS); // String
 	public var _dataComponents:Array = new Array(MAX_BLOCKS); // Dictionary TODO
@@ -34,10 +36,12 @@ public class CoreStorage
 	// Dictionary {String to Function}:
 	public var _eventHandlerComponents:Array = new Array(MAX_BLOCKS);
 	public var _bindingComponents:Array = new Array(MAX_BLOCKS); // Vector.<Function>;
+	public var _allComponents:Dictionary = new Dictionary();
 
 	// blocks:
 	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
 	protected var _blocksCount:int = 0;
+	protected var rootBlockId:int = -1;
 
 	// systems:
 	protected var _resourceSystem:ResourceSystem = new ResourceSystem();
@@ -46,7 +50,7 @@ public class CoreStorage
 	protected var _animationSystem:AnimationSystem = new AnimationSystem();
 	protected var _flashEventSystem:FlashEventSystem = new FlashEventSystem();
 	protected var _bindingSystem:BindingSystem = new BindingSystem();
-	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
+	CONFIG::DEBUG protected var _debugSystem:DebugSystem = new DebugSystem();
 
 	// Reactions - internal Ferdinand's events
 	private var _reactions:Dictionary = new Dictionary();
@@ -54,14 +58,13 @@ public class CoreStorage
 	public function CoreStorage()
 	{
 		super();
-	}
-
-	public function getRootBlock():int
-	{
-		var newBlockId:int = getEmptyBlock();
-		_parentBlockComponents[newBlockId] = PARENT_COMPONENT_OF_ROOT_BLOCK;
-		ensureDataComponentExist(newBlockId, true); // root always has data
-		return newBlockId;
+		_allComponents[CoreComponents.DISPLAY] = _displayComponents;
+		_allComponents[CoreComponents.LAYOUT] = _layoutComponents;
+		_allComponents[CoreComponents.SKIN] = _skinComponents;
+		_allComponents[CoreComponents.CHILDREN_BLOCKS] = _childBlockComponents;
+		_allComponents[CoreComponents.DATA] = _dataComponents;
+		_allComponents[CoreComponents.EVENT_HANDLER] = _eventHandlerComponents;
+		_allComponents[CoreComponents.BINDING] = _bindingComponents;
 	}
 
 	public function addDisplayComponent(blockId:int, container:DisplayObjectContainer):void
@@ -92,22 +95,6 @@ public class CoreStorage
 	public function addResourceRequest(request:ResourceRequest):void
 	{
 		_resourceSystem.registerRequest(request);
-	}
-
-	public function ensureDataComponentExist(blockId:int, newDataScope:Boolean = false):void
-	{
-		if (_dataComponents[blockId] == undefined)
-		{
-			if (newDataScope)
-			{
-				_dataComponents[blockId] = new Dictionary();
-			}
-			else
-			{
-				_dataComponents[blockId] = GetParentDataComponent(this, blockId);
-			}
-			_blocks[blockId] |= CoreComponents.DATA;
-		}
 	}
 
 	/**
@@ -144,7 +131,6 @@ public class CoreStorage
 		_flashEventSystem.registerNewHandler(blockId, eventType, handler);
 
 		_blocks[blockId] |= CoreComponents.EVENT_HANDLER;
-		ensureDataComponentExist(blockId);
 	}
 
 	/**
@@ -166,7 +152,6 @@ public class CoreStorage
 		}
 
 		_blocks[blockId] |= CoreComponents.BINDING;
-		ensureDataComponentExist(blockId);
 	}
 
 	public function addSetDisplayPropertyRequest(blockId:int, property:String, value:*):void
@@ -189,13 +174,10 @@ public class CoreStorage
 	public function notifyChange(blockId:int, component:int, propertyName:String):void
 	{
 		const key:String = blockId + "_" + component + "_" + propertyName;
-		const reactions:Vector.<Function> = _reactions[key];
-		if (reactions != null)
+		const reactions:Dictionary = _reactions[key];
+		for (var reaction:Object in reactions)
 		{
-			for (var i:int = 0; i < reactions.length; i++)
-			{
-				reactions[i](blockId, this);
-			}
+			(reaction as Function)(blockId, this);
 		}
 	}
 
@@ -203,8 +185,14 @@ public class CoreStorage
 	                                  reaction:Function):void
 	{
 		const key:String = blockId + "_" + component + "_" + propertyName;
-		
-		_reactions[key] = reaction;
+
+		var reactions:Dictionary = _reactions[key];
+		if (reactions == null)
+		{
+			reactions = new Dictionary();
+			_reactions[key] = reactions;
+		}
+		reactions[reaction] = true;
 	}
 
 	protected function getEmptyBlock():int
@@ -216,11 +204,24 @@ public class CoreStorage
 			Assert(newBlockId < MAX_BLOCKS);
 			Assert(_blocks[newBlockId] == CoreComponents.NO_COMPONENTS);
 		}
+		_dataComponents[newBlockId] = new Dictionary();
+		_blocks[newBlockId] |= CoreComponents.DATA;
+		return newBlockId;
+	}
+
+	internal function initByRootBlock(content:Sprite):int
+	{
+		content.addEventListener(Event.ENTER_FRAME, update, false, 0, true);
+		var newBlockId:int = getEmptyBlock();
+		rootBlockId = newBlockId;
+		_parentBlockComponents[newBlockId] = PARENT_COMPONENT_OF_ROOT_BLOCK;
+		addDisplayComponent(newBlockId, content);
 		return newBlockId;
 	}
 
 	internal function reset():void
 	{
+		_displayComponents[rootBlockId].addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 		// TODO: implement
 		_reactions = new Dictionary();
 	}
@@ -230,17 +231,29 @@ public class CoreStorage
 	 * Expected to be call
 	 * @param event
 	 */
-	public function update(event:Event):void
+	protected function update(event:Event):void
 	{
-		_resourceSystem.update(this);
-		_displaySystem.update(this);
-		_layoutSystem.update(this);
-		_animationSystem.update(this);
-		_flashEventSystem.update(this);
-		_bindingSystem.update(this);
+		var updateStart:int = getTimer();
 		CONFIG::DEBUG
 		{
-			_memory.update();
+			_debugSystem.beginUpdate();
+		}
+		while ((getTimer() - updateStart) <= UPDATE_TIME_BUDGET)
+		{
+			_resourceSystem.update(this);
+			_displaySystem.update(this);
+			_layoutSystem.update(this);
+			_animationSystem.update(this);
+			_flashEventSystem.update(this);
+			_bindingSystem.update(this);
+			CONFIG::DEBUG
+			{
+				_debugSystem.update();
+			}
+		}
+		CONFIG::DEBUG
+		{
+			_debugSystem.endUpdate();
 		}
 	}
 }

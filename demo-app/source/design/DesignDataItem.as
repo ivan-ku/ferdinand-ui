@@ -22,11 +22,11 @@ public function DesignDataItem(blockId:int, storage:CoreStorage):void
 
 		var categoryId:int = storage.getChildBlock(categoryButton);
 		AddSkin(storage, categoryId, "ListCategoryBackground");
-		storage.addBinding(categoryId, BindVisibleToExpanded);
+		storage.addBinding(categoryButton, BindVisibleToExpanded(categoryId));
 
 		categoryId = storage.getChildBlock(categoryButton);
 		AddSkin(storage, categoryId, "ListCategoryBackgroundUnselected");
-		storage.addBinding(categoryId, BindVisibleToNotExpanded);
+		storage.addBinding(categoryButton, BindVisibleToNotExpanded(categoryId));
 	}
 }
 }
