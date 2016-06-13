@@ -1,0 +1,33 @@
+category,   subcategory,        label,          date,   icon,   payload
+
+South,      Points of interest, First,          1,      ,       ,
+South,      Points of interest, Second,         2,      ,       ,
+South,      Points of interest, Third,          3,      ,       ,
+South,      Event,              Meet here,      42,     ,       ,
+South,      Event,              Part here,      31,     ,       ,
+South,      Character,          Sonya,          85,     ,       ,
+South,      Character,          Elvin,          473,    ,       ,
+
+North,      ,                   First,          1,      ,       ,
+North,      ,                   Second,         2,      ,       ,
+North,      ,                   Third,          3,      ,       ,
+North,      Event,              Meet here,      42,     ,       ,
+North,      Event,              Part here,      31,     ,       ,
+North,      Character,          Sonya,          85,     ,       ,
+North,      Character,          Elvin,          473,    ,       ,
+
+West,       Points of interest, First,          583,    ,       ,
+West,       Points of interest, Second,         23,     ,       ,
+West,       Points of interest, Third,          944,    ,       ,
+West,       Character,          Patrick,        547,    ,       ,
+West,       Character,          John,           495,    ,       ,
+West,       Character,          Harry,          573,    ,       ,
+West,       Character,          Marta,          123,    ,       ,
+
+East,       Points of interest, First,          1,      ,       ,
+East,       Points of interest, Second,         2,      ,       ,
+East,       Points of interest, Third,          3,      ,       ,
+East,       Event,              Meet here,      42,     ,       ,
+East,       Event,              Part here,      31,     ,       ,
+East,       Character,          Sonya,          85,     ,       ,
+East,       Character,          Elvin,          473,    ,       ,

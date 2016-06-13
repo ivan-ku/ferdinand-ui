@@ -6,7 +6,6 @@ Starling support is planned as well.
 # Functional requirements: 
 * Support skinning, dynamic skin (re)loading, external skin libraries, skins from .fla files
 * Support rich animation capabilities without MovieClip
-* Support any FPS, tweakable by designer
 * Support mouse, keyboard, gamepad and touch interaction
 * Support easy switch between Starling and classic DisplayObjects
 * Data input interface that supports live updates and disk input
@@ -17,10 +16,10 @@ Starling support is planned as well.
     * low - best performance
     * optimal - balanced, best for average hardware
     * fine - best-looking, possibly slow
-* Do not allocate memory outside layout (re)load, skin/preset/resolution change (setup())
+* Do not allocate memory outside layout (re)load, skin/preset/resolution/data change (setup())
 * Designer may add placeholder(preloader) animation/state for expensive operations (like setup()) to any skin
 * Time-budget for frame (1ms for everything by default)
-* Delay update if we don't fit, do not accumulate the lag with time
+* Postpone update if we do not fit into budget, do not accumulate the lag with time
 * Any time-consuming process (like setup()) could be "split" into several frames to prevent lag
 
 # Technological requirements:

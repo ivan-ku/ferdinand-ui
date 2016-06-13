@@ -1,0 +1,7 @@
+category,   subcategory,        label,          date,   icon,   payload
+
+,           ,                   Beginning,      1,      ,       "Lorem ipsum",
+,           ,                   Continue,       1,      ,       "Long text should be here
+even with line breaks and
+fancy stuff",
+,           ,                   Ending,         1,      ,       "Lorem ipsum",
