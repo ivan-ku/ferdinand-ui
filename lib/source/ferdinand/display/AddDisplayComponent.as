@@ -20,8 +20,20 @@ public function AddDisplayComponent(storage:CoreStorage, blockId:int,
 		container.addChild(obj);
 	}
 
-	storage._boundsComponents[blockId] = obj.getBounds(obj);
 	storage._displayComponents[blockId] = obj;
 	storage._blocks[blockId] |= CoreComponents.DISPLAY;
+
+
+	// update container's bounds:
+	var changedBlockId:int = blockId;
+	while (changedBlockId != CoreStorage.PARENT_COMPONENT_OF_ROOT_BLOCK)
+	{
+		var display:DisplayObjectContainer = storage._displayComponents[changedBlockId];
+		if (display != null)
+		{
+			storage._boundsComponents[changedBlockId] = display.getBounds(display);
+		}
+		changedBlockId = storage._parentBlockComponents[changedBlockId];
+	}
 }
 }
