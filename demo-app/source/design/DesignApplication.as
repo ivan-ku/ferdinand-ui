@@ -2,7 +2,11 @@ package design
 {
 import ferdinand.core.CoreStorage;
 
-// Example of simple application implementation using Ferdinand AS3 mode
+/**
+ * It's pretty standard Ferdinand instance description function
+ * @param blockId
+ * @param storage
+ */
 public function DesignApplication(blockId:int, storage:CoreStorage):void
 {
 	// TODO: handle resize and scaling
@@ -10,6 +14,7 @@ public function DesignApplication(blockId:int, storage:CoreStorage):void
 
 	// TODO: create buttons to switch controls
 	// TODO: create field for search input
+	// TODO: create control to switch sorting
 	// TODO: create textarea output for DesignTutorialList
 	// TODO: create image output for DesignInventoryList
 	DesignGlossaryList(blockId, storage);

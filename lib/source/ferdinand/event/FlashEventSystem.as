@@ -9,7 +9,7 @@ import flash.display.DisplayObjectContainer;
 import flash.events.Event;
 import flash.utils.Dictionary;
 
-public class EventSystem implements ICoreSystem
+public class FlashEventSystem implements ICoreSystem
 {
 	protected var _eventBus:Vector.<Event> = new Vector.<Event>();
 	protected var _handlers:Dictionary = new Dictionary(true);
@@ -17,7 +17,7 @@ public class EventSystem implements ICoreSystem
 
 	protected var _registrationQueue:Vector.<EventRegistrationRequest> = new Vector.<EventRegistrationRequest>();
 
-	public function EventSystem()
+	public function FlashEventSystem()
 	{
 		super();
 	}

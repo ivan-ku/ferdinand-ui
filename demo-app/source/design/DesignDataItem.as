@@ -11,7 +11,7 @@ import ferdinand.resource.AddSkin;
 
 import flash.events.MouseEvent;
 
-public function CreateDataItem(blockId:int, storage:CoreStorage):void
+public function DesignDataItem(blockId:int, storage:CoreStorage):void
 {
 	var categoryButton:int = storage.getChildBlock(blockId);
 	{

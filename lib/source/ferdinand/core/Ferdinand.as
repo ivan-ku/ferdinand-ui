@@ -18,6 +18,7 @@ public class Ferdinand
 
 	/**
 	 * Associate container with new Ferdinand instance
+	 * Start Ferdinand's heartbeat (Event.ENTER_FRAME) handler
 	 * @param content must be added to Stage already
 	 * @param creation description of Ferdinand instance
 	 */
@@ -36,7 +37,7 @@ public class Ferdinand
 
 	/**
 	 * Stop Ferdinand and clean-up, everything becomes as it was before init()
-	 * Repeated call to init() will re-initialize this instance of Ferdinand.
+	 * Repeated call to init() will re-initialize this instance of Ferdinand
 	 * To completely destroy Ferdinand call reset() and set all Ferdinand references to null
 	 */
 	public function reset():void
