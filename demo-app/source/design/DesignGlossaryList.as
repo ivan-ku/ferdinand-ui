@@ -1,5 +1,6 @@
 package design
 {
+import ferdinand.controls.LoopOverList;
 import ferdinand.core.CoreStorage;
 import ferdinand.data.AddDataFromFile;
 import ferdinand.resource.AddSkin;
@@ -18,8 +19,8 @@ public function DesignGlossaryList(blockId:int, storage:CoreStorage):int
 		storage.addLayout(listItemsContainerId, "vertical");
 		const dataId:String = "glossary_data";
 		AddDataFromFile(storage, selfId, "assets/glossary.csv", dataId);
-		CreateDataItem(listItemsContainerId, storage);
-//		base.addBlocksConstructorFromData(selfId, dataId, CreateDataItem);
+//		DesignDataItem(listItemsContainerId, storage);
+		LoopOverList(storage, selfId, dataId, DesignDataItem);
 	}
 
 	return selfId;

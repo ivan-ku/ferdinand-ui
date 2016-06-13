@@ -38,6 +38,7 @@ public class DisplaySystem implements ICoreSystem
 				{
 					storage._displayComponents[blockIdStr][propertyName] = requests[propertyName];
 					delete requests[propertyName];
+					storage.notifyChange(blockId, CoreComponents.DISPLAY, propertyName);
 				}
 				delete _dirtyBlocks[key];
 			}

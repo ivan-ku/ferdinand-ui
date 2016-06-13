@@ -7,7 +7,7 @@ import ferdinand.debug.Assert;
 import ferdinand.debug.MemoryMonitoringSystem;
 import ferdinand.display.AddDisplayComponent;
 import ferdinand.display.DisplaySystem;
-import ferdinand.event.EventSystem;
+import ferdinand.event.FlashEventSystem;
 import ferdinand.layout.LayoutSystem;
 import ferdinand.resource.ResourceRequest;
 import ferdinand.resource.ResourceSystem;
@@ -39,14 +39,17 @@ public class CoreStorage
 	public var _blocks:Vector.<int> = new Vector.<int>(MAX_BLOCKS, true);
 	protected var _blocksCount:int = 0;
 
-	//systems:
+	// systems:
 	protected var _resourceSystem:ResourceSystem = new ResourceSystem();
 	protected var _displaySystem:DisplaySystem = new DisplaySystem();
 	protected var _layoutSystem:LayoutSystem = new LayoutSystem();
 	protected var _animationSystem:AnimationSystem = new AnimationSystem();
-	protected var _eventSystem:EventSystem = new EventSystem();
+	protected var _flashEventSystem:FlashEventSystem = new FlashEventSystem();
 	protected var _bindingSystem:BindingSystem = new BindingSystem();
 	CONFIG::DEBUG protected var _memory:MemoryMonitoringSystem = new MemoryMonitoringSystem();
+
+	// Reactions - internal Ferdinand's events
+	private var _reactions:Dictionary = new Dictionary();
 
 	public function CoreStorage()
 	{
@@ -138,7 +141,7 @@ public class CoreStorage
 		}
 		handlers[eventType] = handler;
 
-		_eventSystem.registerNewHandler(blockId, eventType, handler);
+		_flashEventSystem.registerNewHandler(blockId, eventType, handler);
 
 		_blocks[blockId] |= CoreComponents.EVENT_HANDLER;
 		ensureDataComponentExist(blockId);
@@ -183,6 +186,27 @@ public class CoreStorage
 		return blockId;
 	}
 
+	public function notifyChange(blockId:int, component:int, propertyName:String):void
+	{
+		const key:String = blockId + "_" + component + "_" + propertyName;
+		const reactions:Vector.<Function> = _reactions[key];
+		if (reactions != null)
+		{
+			for (var i:int = 0; i < reactions.length; i++)
+			{
+				reactions[i](blockId, this);
+			}
+		}
+	}
+
+	public function subscribeToChange(blockId:int, component:int, propertyName:String,
+	                                  reaction:Function):void
+	{
+		const key:String = blockId + "_" + component + "_" + propertyName;
+		
+		_reactions[key] = reaction;
+	}
+
 	protected function getEmptyBlock():int
 	{
 		var newBlockId:int = _blocksCount;
@@ -198,6 +222,7 @@ public class CoreStorage
 	internal function reset():void
 	{
 		// TODO: implement
+		_reactions = new Dictionary();
 	}
 
 	/**
@@ -211,7 +236,7 @@ public class CoreStorage
 		_displaySystem.update(this);
 		_layoutSystem.update(this);
 		_animationSystem.update(this);
-		_eventSystem.update(this);
+		_flashEventSystem.update(this);
 		_bindingSystem.update(this);
 		CONFIG::DEBUG
 		{
