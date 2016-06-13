@@ -30,7 +30,8 @@ Starling support is planned as well.
 * Cover with unit tests everything that could be unit-tested
 
 # Roadmap
-Right now demo-app featuring List-like controls with scrolling is in active development, see [demo_reactions branch](https://github.com/ivan-ku/ferdinand-ui/tree/demo_reactions) 
+Right now demo-app featuring List-like controls with scrolling is in active development.
+Expect pre-alpha version by the Autumn 2016.
 
 # See you!
 Ferdinand named after [Ferdinand de Saussure](https://en.wikipedia.org/wiki/Ferdinand_de_Saussure) and is just a fantasy right now, but it will be real soon (at least I hope so).
