@@ -1,11 +1,12 @@
 package design
 {
 import design.expressions.BindAlphaToIsOver;
-import design.expressions.BindVisibleToExpanded;
-import design.expressions.BindVisibleToNotExpanded;
 import design.expressions.ToggleExpanded;
 
+import ferdinand.bind.BindingExpression;
+import ferdinand.bind.InvertBoolean;
 import ferdinand.controls.MakeInteractive;
+import ferdinand.core.CoreComponents;
 import ferdinand.core.CoreStorage;
 import ferdinand.resource.AddSkin;
 
@@ -17,16 +18,21 @@ public function DesignDataItem(blockId:int, storage:CoreStorage):void
 	{
 		AddSkin(storage, categoryButton, "flash.display.Sprite");
 		MakeInteractive(storage, categoryButton);
-		storage.addBinding(categoryButton, BindAlphaToIsOver);
+		BindAlphaToIsOver(categoryButton, storage);
 		storage.addEventHandler(categoryButton, MouseEvent.CLICK, ToggleExpanded);
 
 		var categoryId:int = storage.getChildBlock(categoryButton);
 		AddSkin(storage, categoryId, "ListCategoryBackground");
-		storage.addBinding(categoryButton, BindVisibleToExpanded(categoryId));
+		const expanded:String = "expanded";
+		const visible:String = "visible";
+		storage.addBinding(
+				new BindingExpression(categoryButton, CoreComponents.DATA, expanded, categoryId, CoreComponents.DISPLAY, visible));
 
 		categoryId = storage.getChildBlock(categoryButton);
 		AddSkin(storage, categoryId, "ListCategoryBackgroundUnselected");
-		storage.addBinding(categoryButton, BindVisibleToNotExpanded(categoryId));
+		const expression:BindingExpression = new BindingExpression(categoryButton, CoreComponents.DATA, expanded, categoryId, CoreComponents.DISPLAY, visible);
+		expression.transformation = InvertBoolean;
+		storage.addBinding(expression);
 	}
 }
 }
