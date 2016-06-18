@@ -1,6 +1,7 @@
 package ferdinand.core
 {
 import ferdinand.animation.AnimationSystem;
+import ferdinand.bind.BindingExpression;
 import ferdinand.bind.BindingSystem;
 import ferdinand.debug.Assert;
 import ferdinand.debug.DebugSystem;
@@ -35,7 +36,7 @@ public class CoreStorage
 	public var _boundsComponents:Array = new Array(MAX_BLOCKS); // Rectangle
 	// Dictionary {String to Function}:
 	public var _eventHandlerComponents:Array = new Array(MAX_BLOCKS);
-	public var _bindingComponents:Array = new Array(MAX_BLOCKS); // Vector.<Function>;
+	public var _bindingComponents:Array = new Array(MAX_BLOCKS); // Vector.<BindingExpression>;
 	public var _allComponents:Dictionary = new Dictionary();
 
 	// blocks:
@@ -53,7 +54,7 @@ public class CoreStorage
 	CONFIG::DEBUG protected var _debugSystem:DebugSystem = new DebugSystem();
 
 	// Reactions - internal Ferdinand's events
-	private var _reactions:Dictionary = new Dictionary();
+	private var _reactions:Dictionary = new Dictionary(); // BindingExpression
 
 	public function CoreStorage()
 	{
@@ -136,19 +137,19 @@ public class CoreStorage
 	/**
 	 * Add expression that "binds" destination to source
 	 * TODO Expression evaluates every time source is changed
-	 * @param blockId
-	 * @param bindingExpression TODO special type: BindingExpression
+	 * @param expression 
 	 */
-	public function addBinding(blockId:int, bindingExpression:Function):void
+	public function addBinding(expression:BindingExpression):void
 	{
-		var bindings:Vector.<Function> = _bindingComponents[blockId];
+		var blockId:int = expression.sourceBlockId;
+		var bindings:Vector.<BindingExpression> = _bindingComponents[blockId];
 		if (bindings == null)
 		{
-			_bindingComponents[blockId] = new <Function>[bindingExpression];
+			_bindingComponents[blockId] = new <BindingExpression>[expression];
 		}
 		else
 		{
-			bindings.push(bindingExpression);
+			bindings.push(expression);
 		}
 
 		_blocks[blockId] |= CoreComponents.BINDING;
@@ -177,12 +178,12 @@ public class CoreStorage
 		const reactions:Dictionary = _reactions[key];
 		for (var reaction:Object in reactions)
 		{
-			(reaction as Function)(blockId, this);
+			addBinding(BindingExpression(reaction));
 		}
 	}
 
 	public function subscribeToChange(blockId:int, component:int, propertyName:String,
-	                                  reaction:Function):void
+	                                  reaction:BindingExpression):void
 	{
 		const key:String = blockId + "_" + component + "_" + propertyName;
 
