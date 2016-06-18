@@ -22,7 +22,7 @@ public class BindingExpression
 		this.targetProperty = targetProperty;
 	}
 
-	public function toString():String
+	CONFIG::DEBUG public function toString():String
 	{
 		return "BindingExpression{sourceBlockId=" + String(sourceBlockId) + ",sourceComponent=" +
 				String(sourceComponent) + ",sourceProperty=" + String(sourceProperty) +
