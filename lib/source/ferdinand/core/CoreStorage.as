@@ -136,8 +136,7 @@ public class CoreStorage
 
 	/**
 	 * Add expression that "binds" destination to source
-	 * TODO Expression evaluates every time source is changed
-	 * @param expression 
+	 * @param expression evaluates every time it's source is changed
 	 */
 	public function addBinding(expression:BindingExpression):void
 	{
